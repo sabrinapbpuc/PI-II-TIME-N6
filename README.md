@@ -1,4 +1,6 @@
 # PI-II-TIME-N6
 
-Nome dos integrantes:
-Higor Tricarico Fachini
+| Nome dos integrantes |
+| :---: |
+| 'Higor Tricarico Fachini' |
+| 'Natã Ribeiro Carvalho' |
