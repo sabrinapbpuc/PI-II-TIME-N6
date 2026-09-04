@@ -5,7 +5,7 @@
 | 'Higor Tricarico Fachini' |
 | 'Natã Ribeiro Carvalho' |
 | 'Sabrina Porfilia Barbosa' |           
-| '                     ' |
+| 'Gabriela Natsumi Kawaguchi' |
 
 
 
