@@ -11,7 +11,8 @@ body {
     margin: 0;
 }
 
-h1:hover, h2:hover, p:hover, th:hover, td:hover {
+/* Removido o seletor 'td' daqui para permitir que o cursor pointer funcione no tbody tr */
+h1:hover, h2:hover, p:hover, th:hover {
     cursor: default;
 }
 
@@ -78,9 +79,9 @@ header p {
 
 .barra-busca {
     padding: 8px 14px;
-    height: 48px; /* Aumentado ligeiramente */
-    width: 380px; /* Mais larga para acomodar o texto */
-    font-size: 18px; /* Aumentado para 18px */
+    height: 48px; 
+    width: 380px; 
+    font-size: 18px; 
     margin-left: 20px;
     border: 1px solid #D1D5DB;
     border-radius: 6px;
@@ -93,9 +94,9 @@ header p {
 
 .btn-nova-demanda {
     margin-left: auto; 
-    font-size: 18px; /* Aumentado para 18px */
+    font-size: 18px; 
     font-weight: bold;
-    height: 48px; /* Aumentado */
+    height: 48px; 
     border: 0px;
     padding: 0 24px;
     background-color: #2E3D4F;
@@ -130,7 +131,7 @@ header p {
 }
 
 .filtros h2 {
-    font-size: 24px; /* Aumentado */
+    font-size: 24px; 
     margin: 0;
     margin-bottom: 14px;
     color: #2E3D4F;
@@ -153,16 +154,16 @@ header p {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    font-size: 18px; /* Aumentado os labels do Filtro para 18px */
+    font-size: 18px; 
     color: #2E3D4F;
     font-weight: bold;
 }
 
 .dropbox {
     padding: 8px 12px;
-    height: 46px; /* Aumentado para o texto não ficar apertado */
-    width: 200px; /* Largura ajustada para o tamanho da fonte */
-    font-size: 18px; /* Aumentado o texto de dentro do select para 18px */
+    height: 46px; 
+    width: 200px; 
+    font-size: 18px; 
     color: #2E3D4F; 
     border: 1px solid #D1D5DB;
     border-radius: 6px;
@@ -170,7 +171,7 @@ header p {
     outline: none;
 }
 
-/* Tabela de Demandas Reestruturada */
+/* Tabela de Demandas */
 table {
     width: 100%;
     border-collapse: collapse; 
@@ -183,20 +184,28 @@ table {
 }
 
 th, td {
-    padding: 20px 24px; /* Mais espaçamento interno para respirar com o texto maior */
+    padding: 20px 24px; 
     text-align: left;
 }
 
 thead th {
-    font-size: 18px; /* Cabeçalho da tabela aumentado para 18px */
+    font-size: 18px; 
     font-weight: bold;
     color: #000000;
     border-bottom: 2px solid #E2E8F0;
     background-color: white;
 }
 
+/* Configurações das linhas clicáveis no tbody */
 tbody tr {
     border-bottom: 1px solid #F1F5F9; 
+    cursor: pointer; /* Transforma o cursor do mouse em mãozinha */
+    transition: background-color 0.2s ease;
+}
+
+/* Efeito de hover para destacar a linha inteira */
+tbody tr:hover {
+    background-color: #F8FAFC; 
 }
 
 tbody tr:last-child {
@@ -204,7 +213,7 @@ tbody tr:last-child {
 }
 
 tbody td {
-    font-size: 18px; /* Linhas da tabela aumentadas para 18px */
+    font-size: 18px; 
 }
 
 .txt-mutado {
@@ -216,7 +225,7 @@ tbody td {
     display: inline-block;
     padding: 6px 16px; 
     border-radius: 6px;
-    font-size: 16px; /* Aumentado proporcionalmente */
+    font-size: 16px; 
     font-weight: bold;
 }
 
