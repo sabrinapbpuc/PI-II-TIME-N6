@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Demanda</title>
+    <!-- Ligação ao arquivo CSS externo -->
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome para os ícones de seta e calendário -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="modal">
+        <h2 class="modal-title">Nova Demanda</h2>
+        
+        <form>
+            <div class="form-grid">
+                <!-- Coluna Esquerda - Linha 1 -->
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" placeholder="Digite aqui o nome da demanda">
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 1 -->
+                <div class="form-group">
+                    <label>Status:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option value="" disabled selected>Selecione o status</option>
+                            <option>Pendente</option>
+                            <option>Em Andamento</option>
+                            <option>Concluído</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Coluna Esquerda - Linha 2 -->
+                <div class="form-group">
+                    <label>Tipo:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option value="" disabled selected>Selecione o tipo</option>
+                            <option>Tipo 1</option>
+                            <option>Tipo 2</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 2 -->
+                <div class="form-group">
+                    <label>Responsável:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option value="" disabled selected>Selecione o responsável</option>
+                            <option>Pessoa 1</option>
+                            <option>Pessoa 2</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Coluna Esquerda - Linha 3 -->
+                <div class="form-group">
+                    <label>Prioridade:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option value="" disabled selected>Selecione a prioridade</option>
+                            <option>Alta</option>
+                            <option>Média</option>
+                            <option>Baixa</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 3 -->
+                <div class="form-group">
+                    <label>Projeto:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option value="" disabled selected>Selecione o projeto</option>
+                            <option>Projeto A</option>
+                            <option>Projeto B</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Coluna Esquerda - Linha 4 -->
+                <div class="form-group">
+                    <label>Prazo:</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" placeholder="**/**/**">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 4 (Botão Salvar) -->
+                <div class="form-group btn-container">
+                    <button type="submit" class="btn-save">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
