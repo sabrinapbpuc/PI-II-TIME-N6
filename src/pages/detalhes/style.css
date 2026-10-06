@@ -9,6 +9,11 @@
     flex-direction: column;
 }
 
+.inicial a{
+    margin-left: auto;
+    text-decoration: none;
+}
+
 .inicial h1 {
     font-size: 34px; 
     color: #2E3D4F;
