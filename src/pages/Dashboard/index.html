@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <!-- HEADER DASHBOARD-->
+    <header>
+        <div class="items-header">
+            <div class="nav-items">
+                <button class="menu-hamburguer">
+                    <img src="/src/icons/menu-hamburguer.svg" alt="">
+                </button>
+                <h1>Dashboard</h1>
+            </div>
+            <div class="items-perfil">
+                <button class="perfil-button">
+                    <img src="/src/icons/Chevron_Down.svg" alt="">
+                </button>
+                <img src="https://i.pravatar.cc/150" alt="Foto de Perfil" class="foto-perfil">
+            </div>
+        </div>
+    </header>
+    <hr class="linha-topo">
+
+    <div class="cards">
+
+        <div class="card-info">
+            <h3>TOTAL DE DEMANDAS</h3>
+            <h4>50</h4>
+        </div>
+
+        <div class="card-info">
+            <h3>ABERTAS</h3>
+            <h4>50</h4>
+        </div>
+
+        <div class="card-info">
+            <h3>EM ANDAMENTO</h3>
+            <h4>50</h4>
+        </div>
+
+        <div class="card-info">
+            <h3>EM REVISÃO</h3>
+            <h4>50</h4>
+        </div>
+
+        <div class="card-info">
+            <h3>CONCLUIDAS</h3>
+            <h4>50</h4>
+        </div>
+
+        <div class="card-info">
+            <h3>CANCELADAS</h3>
+            <h4>50</h4>
+        </div>
+    </div>
+
+
+    <div class="cards-prioridades-tipos">
+
+        <div class="card-prioridades">
+            <h2>PRIORIDADE</h2>
+            <hr class="linha-card">
+
+            <div class="grafico-area">
+                <!-- GRID DE FUNDO DO GRÁFICO-->
+                <div class="grid-line line-0"></div><span class="grid-label label-0">0</span>
+                <div class="grid-line line-10"></div><span class="grid-label label-10">10</span>
+                <div class="grid-line line-20"></div><span class="grid-label label-20">20</span>
+                <div class="grid-line line-30"></div><span class="grid-label label-30">30</span>
+                <div class="grid-line line-40"></div><span class="grid-label label-40">40</span>
+                <div class="grid-line line-50"></div><span class="grid-label label-50">50</span>
+
+                <!-- BARRA BAIXA -->
+                <div class="bar-row">
+                    <span class="label-priority baixa">Baixa</span>
+                    <div class="bar-bg">
+                        <div class="bar-fill baixa" style="width: 40%;"></div>
+                    </div>
+                </div>
+
+                <!-- BARRA ALTA -->
+                <div class="bar-row">
+                    <span class="label-priority alta">Alta</span>
+                    <div class="bar-bg">
+                        <div class="bar-fill alta" style="width: 86%;"></div>
+                    </div>
+                </div>
+
+                <!-- BARRA MÉDIA-->
+                <div class="bar-row">
+                    <span class="label-priority media">Média</span>
+                    <div class="bar-bg">
+                        <div class="bar-fill media" style="width: 62%;"></div>
+                    </div>
+                </div>
+
+                <!--BARRA CRÍTICA -->
+                <div class="bar-row">
+                    <span class="label-priority critica">Crítica</span>
+                    <div class="bar-bg">
+                        <div class="bar-fill critica" style="width: 10%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--CARD DE TIPOS-->
+        <div class="card-tipos">
+            <h2>TIPOS</h2>
+            <hr class="linha-card">
+
+            <div class="tipos-list">
+                <div class="tipo-item">
+                    <span class="tipo-label">TAREFA</span>
+                    <span class="tipo-count">5</span>
+                </div>
+                <div class="tipo-item">
+                    <span class="tipo-label">DEFEITO</span>
+                    <span class="tipo-count">1</span>
+                </div>
+                <div class="tipo-item">
+                    <span class="tipo-label">MELHORIA</span>
+                    <span class="tipo-count">2</span>
+                </div>
+                <div class="tipo-item">
+                    <span class="tipo-label">DOCUMENTO</span>
+                    <span class="tipo-count">3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEGUNDA DIV CARDS DE CRITICAS E PRAZOS -->
+    <div class="cards-criticas-prazos">
+
+        <!-- CARD CRÍTICAS EM ABERTO  -->
+        <div class="card-criticas">
+            <h2>CRÍTICAS EM ABERTO</h2>
+            <hr class="linha-card">
+
+            <div class="criticas-list">
+                <!-- Lista das demandas criticas-->
+                <a href="#" class="critica-item">Criar campo e-mail</a>
+                <a href="#" class="critica-item">Criar campo senha</a>
+                <a href="#" class="critica-item">Criar botão menu</a>
+                <a href="#" class="critica-item">Criar botão Login</a>
+            </div>
+        </div>
+
+        <!-- Card de prazos proximos a finalização-->
+        <div class="card-prazos">
+            <h2>PRÓXIMAS AO PRAZO DE FINALIZAÇÃO</h2>
+            <hr class="linha-card">
+
+            <!-- Cabeçalho da tabela de prazos -->
+            <div class="prazos-header">
+                <span>TÍTULO</span>
+                <span>PRAZO</span>
+            </div>
+
+            <div class="prazos-list">
+                <!-- Nome de uma demanda e seu prazo-->
+                <div class="prazo-item">
+                    <span class="prazo-titulo">CRIAR CAMPO SENHA</span>
+                    <span class="prazo-badge">12/09</span>
+                </div>
+
+                <div class="prazo-item">
+                    <span class="prazo-titulo">CRIAR CAMPO TEXTO</span>
+                    <span class="prazo-badge">13/09</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+</body>
+
+</html>
