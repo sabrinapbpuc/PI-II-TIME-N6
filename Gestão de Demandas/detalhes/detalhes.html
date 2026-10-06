@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Demandas</title>
+    <!-- Importação da fonte Roboto do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <button class="menu-hamburguer">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <p>Sistema de Demandas</p>
+    </header>
+    <hr class="linha-topo">
+
+    <div class="inicial">
+        <div class="inicial-info">
+            <h1>Login</h1>
+            <h2>#00123</h2>
+        </div>
+        <button class="btn-editar-demanda">Editar Demanda</button>
+    </div>
+    <div class="informacoes">
+        <div class="tipo">
+            <p>Tarefa</p>
+        </div>
+        <div class="badge alta">
+            <p>Alta</p>
+        </div>
+        <div class="tipo">
+            <p>Em Andamento</p>
+        </div>
+    </div>
+    <hr class="linha-completa">
+    <section class="container">
+        <h1>Informações da Demanda</h1>
+        <section class="descricao-linha-completa">
+            <h3>Descrição</h3>
+            <hr class="linha-completa">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Nunc ornare ex eget cursus sodales. Nullam lobortis metus nibh, eu eleifend libero eleifend auctor. 
+                Etiam orci dolor, rhoncus in mauris quis, pharetra suscipit mi.</p>
+        </section>
+        <section class="container-informacoes">
+            <section class="caixa">
+                <h3>Projeto</h3>
+                <hr class="linha-completa">
+                <p>Sistema de Demandas</p>
+            </section>
+            <section class="caixa">
+                <h3>Responsável</h3>
+                <hr class="linha-completa">
+                <p>João</p>
+            </section>
+            <section class="caixa">
+                <h3>Criada Em</h3>
+                <hr class="linha-completa">
+                <p>10/09/2026</p>
+            </section>
+            <section class="caixa">
+                <h3>Prazo Final</h3>
+                <hr class="linha-completa">
+                <p>20/09/2026</p>
+            </section>
+            <section class="caixa">
+                <h3>Última Atualização</h3>
+                <hr class="linha-completa">
+                <p>17/09/2026</p>
+            </section>
+        </section>
+        <hr class="linha-completa">
+        <section class="container-historico">
+            <h1>Histórico</h1>
+            <section class="historico">
+                <h2>17/09/2026 - João</h2>
+                <hr class="linha-completa">
+                <span>Status alterado: Aberta &#9654; Em Andamento</span>
+            </section>
+            <section class="historico">
+                <h2>16/09/2026 - Maria</h2>
+                <hr class="linha-completa">
+                <span>Prioridade alterada: Média &#9654; Alta</span>
+            </section>
+        </section>
+        <hr class="linha-completa">
+        <section class="container-comentarios">
+            <h1>Comentários</h1>
+            <section class="comentario">
+                <h2>Maria - 17/09/2026</h2>
+                <hr class="linha-completa">
+                <p>Consegui reproduzir o problema.</p>
+            </section>
+            <input type="text" class="caixa-comentario" name="Comentario" id="comentario_id" placeholder="Escreva um comentário...">
+            <button class="btn-comentar">Comentar</button>
+        </section>
+    </section>
+</body>
+</html>
