@@ -106,6 +106,10 @@
     outline: none;
 }
 
+.dropbox:hover{
+    cursor: pointer;
+}
+
 /* Tabela de Demandas */
 table {
     width: 100%;
