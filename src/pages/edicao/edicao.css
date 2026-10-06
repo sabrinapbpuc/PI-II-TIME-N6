@@ -1,0 +1,134 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.modal {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 850px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.modal-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.placeholder-gray::placeholder {
+    color: #94a3b8;
+}
+
+.form-control:focus {
+    border-color: #3b82f6;
+}
+
+/* Remoção da aparência nativa dos selects para aplicar o ícone customizado */
+select.form-control {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    color: #1e293b;
+}
+
+/* Ícone de seta para baixo puro via CSS/HTML */
+.icon-select {
+    position: absolute;
+    right: 16px;
+    color: #2b394a;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+/* Ícone de calendário puro */
+.icon-calendar {
+    position: absolute;
+    right: 16px;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.btn-save {
+    background-color: #2b394a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 0;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-save:hover {
+    background-color: #1e293b;
+}
+
+/* Responsividade para ecrãs menores */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal {
+        padding: 20px;
+        margin: 15px;
+    }
+}

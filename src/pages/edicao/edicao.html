@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edição de Demanda</title>
+    <!-- Ligação ao arquivo CSS externo -->
+    <link rel="stylesheet" href="edicao.css">
+</head>
+<body>
+
+    <div class="modal">
+        <h2 class="modal-title">Edição de Demanda</h2>
+        
+        <form>
+            <div class="form-grid">
+                <!-- Coluna Esquerda - Linha 1: Nome -->
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" value="Relatório">
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 1: Status -->
+                <div class="form-group">
+                    <label>Status:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option selected>Em andamento</option>
+                            <option>Pendente</option>
+                            <option>Concluído</option>
+                        </select>
+                        <span class="icon-select">&#9660;</span>
+                    </div>
+                </div>
+
+                <!-- Coluna Esquerda - Linha 2: Tipo -->
+                <div class="form-group">
+                    <label>Tipo:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option selected>Melhoria</option>
+                            <option>Correção</option>
+                            <option>Nova Funcionalidade</option>
+                        </select>
+                        <span class="icon-select">&#9660;</span>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 2: Responsável -->
+                <div class="form-group">
+                    <label>Responsável:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option selected>João</option>
+                            <option>Maria</option>
+                            <option>Ana</option>
+                        </select>
+                        <span class="icon-select">&#9660;</span>
+                    </div>
+                </div>
+
+                <!-- Coluna Esquerda - Linha 3: Prioridade -->
+                <div class="form-group">
+                    <label>Prioridade:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option selected>Média</option>
+                            <option>Alta</option>
+                            <option>Baixa</option>
+                        </select>
+                        <span class="icon-select">&#9660;</span>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 3: Projeto -->
+                <div class="form-group">
+                    <label>Projeto:</label>
+                    <div class="input-wrapper">
+                        <select class="form-control">
+                            <option selected>Projeto Teste</option>
+                            <option>Projeto Alpha</option>
+                            <option>Projeto Beta</option>
+                        </select>
+                        <span class="icon-select">&#9660;</span>
+                    </div>
+                </div>
+
+                <!-- Coluna Esquerda - Linha 4: Prazo -->
+                <div class="form-group">
+                    <label>Prazo:</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control placeholder-gray" placeholder="**/****/*****">
+                        <span class="icon-calendar">📅</span>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Linha 4: Botão Salvar -->
+                <div class="form-group btn-container">
+                    <button type="submit" class="btn-save">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
