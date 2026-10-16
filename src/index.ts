@@ -1,14 +1,16 @@
 //importando o servidor
-import express from "express";
-
+import express, {Request, Response} from "express";
 
 //criando servidor
-const servidor = express();
-servidor.use(express.json());
-let PORT = 3000;//node .\src\index.js para executar o servidor 
+const app = express();
+app.use(express.json());
+let PORT = 3000;
 
-//QUANDO O SERVIDOR ACESSAR A PORTA, SERA MOSTRADO QUAL PORTA ESTA OUÇA A PORTA 3000 E RETORNE QUE ESTA OUVINDO A PORTA 3000
-servidor.listen(PORT, () => {
-
-    console.log(`Servidor em pé na porta ${PORT}`)
+//QUANDO O SERVIDOR ACESSAR A PORTA, SERA MOSTRADO QUAL PORTA ESTA: PORTA 3000
+app.listen(PORT, () => {
+    console.log(`Servidor aberto na porta ${PORT}`)
 });
+
+app.get("/", (req:Request, res:Response) =>{
+    res.send("Teste resposta do servidor");
+})
