@@ -1,0 +1,31 @@
+{
+  "name": "pi-ii-time-n6",
+  "version": "1.0.0",
+  "description": "| Nome dos integrantes |\r | :---: |\r | 'Higor Tricarico Fachini' |\r | 'Natã Ribeiro Carvalho' |\r | 'Sabrina Porfilia Barbosa' |           \r | 'Gabriela Natsumi Kawaguchi' |",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx tsc-watch --onSuccess \"node ./lib/index.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabrinapbpuc/PI-II-TIME-N6.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sabrinapbpuc/PI-II-TIME-N6/issues"
+  },
+  "homepage": "https://github.com/sabrinapbpuc/PI-II-TIME-N6#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.13",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "tsc-watch": "^7.2.1",
+    "typescript": "^7.0.2"
+  }
+}
