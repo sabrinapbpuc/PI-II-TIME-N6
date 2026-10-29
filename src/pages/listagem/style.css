@@ -81,6 +81,13 @@ header p {
     margin: 0;
 }
 
+#mensagem-listagem{
+    padding: 0;
+    font-size: 18px;
+    margin-left: 20px;
+    color: #2E3D4F;
+}
+
 .barra-busca {
     padding: 8px 14px;
     height: 48px; 
