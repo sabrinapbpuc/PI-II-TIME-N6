@@ -30,6 +30,7 @@
         <h1>Demandas</h1>
         <input type="search" class="barra-busca" name="Busca" id="busca_id"
             placeholder="Pesquise por título ou descrição">
+        <p id="mensagem-listagem" role="status" aria-live="polite"></p>
         <a href="../cadastro-demandas/cadastro.html">
             <button class="btn-nova-demanda">+ Nova Demanda</button>
         </a>
@@ -91,15 +92,21 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Linhas limpas sem atributos de link -->
-                <tr onclick="window.location='../detalhes/detalhes.html';">
+                <tr
+                    data-descricao="Tela de autenticação"
+                    onclick="window.location='../detalhes/detalhes.html';"
+                >
                     <td>Login</td>
                     <td class="txt-mutado">Tarefa</td>
                     <td><span class="badge alta">Alta</span></td>
                     <td class="txt-mutado">Em andamento</td>
                     <td class="txt-mutado">João</td>
                 </tr>
-                <tr>
+
+                <tr
+                    data-descricao="Erro no formulário de cadastro"
+                    onclick="window.location='../detalhes/detalhes.html';"
+                >
                     <td>Erro Cadastro</td>
                     <td class="txt-mutado">Defeito</td>
                     <td><span class="badge critica">Crítica</span></td>
@@ -109,6 +116,7 @@
             </tbody>
         </table>
     </section>
+    <script src="listagem.js" defer></script>
 </body>
 
 </html>
