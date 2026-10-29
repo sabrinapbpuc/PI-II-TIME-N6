@@ -85,6 +85,17 @@ flex-direction: column;
     
 }
 
+.campo input.input-erro{
+    border:1px solid #d93025;
+}
+
+.erro{
+    color:#d93025;
+    font-size:14px;
+    line-height:16px;
+    min-height:16px;
+}
+
 a {
     text-decoration: none;
 }
