@@ -107,10 +107,10 @@ app.get(`/demandas/dashboard`, (req: Request, res: Response) => {
 });
 
 app.post("/demandas", (req: Request, res: Response) => {
-    const { id, titulo, descricao, tipoDemanda, prioridade, status, projetoAssociado, responsavel, prazoFinalizacao } = req.body;
+    const { id, titulo, descricao, tipoDemanda, prioridade, projetoAssociado, responsavel, prazoFinalizacao } = req.body;
 
 
-    if (!id || !titulo || !descricao || !tipoDemanda || !prioridade || !status || !projetoAssociado || !prazoFinalizacao) {
+    if (!titulo || !descricao || !tipoDemanda || !prioridade || !projetoAssociado || !prazoFinalizacao) {
         return res.status(404).json({ mensagem: "Todos campos devem ser preenchidos" })
     }
 
@@ -129,4 +129,54 @@ app.post("/demandas", (req: Request, res: Response) => {
     }
     demandas.push(novaDemanda);
     return res.status(201).json(novaDemanda)
+})
+
+app.put(`/demandas/:id`, (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const { titulo, descricao, tipoDemanda, prioridade, projetoAssociado, responsavel, prazoFinalizacao } = req.body;
+    const indice = demandas.findIndex(demanda => demanda.id === id)
+
+    if (indice === -1) {
+        return res.status(404).json({ mensagem: "Demanda não encontrada!" })
+    }
+    else if (!titulo || !descricao || !tipoDemanda || !prioridade || !projetoAssociado || !prazoFinalizacao) {
+        res.status(400).json({
+            mensagem: "Título, descrição, tipo de demanda, prioridade, projeto associado e prazo de finalização são obrigatórios"
+        })
+
+    }
+    const dataAtual = new Date();
+    demandas[indice] = {
+        id: id,
+        titulo: titulo ?? demandas[indice].titulo,
+        descricao: descricao ?? demandas[indice].descricao,
+        tipoDemanda: tipoDemanda ?? demandas[indice].tipoDemanda,
+        prioridade: prioridade ?? demandas[indice].prioridade,
+        status: "Aberta",
+        projetoAssociado: projetoAssociado ?? demandas[indice].projetoAssociado,
+        responsavel: responsavel !== undefined ? responsavel : demandas[indice].responsavel,
+        dataCriacao: demandas[indice].dataCriacao, 
+        dataUltimaAtualizacao: dataAtual, 
+        prazoFinalizacao: prazoFinalizacao ? new Date(prazoFinalizacao) : demandas[indice].prazoFinalizacao
+    };
+
+    return res.status(200).json(demandas[indice]);
+});
+
+
+app.delete("/demandas/:id", (req:Request, res:Response) =>{
+    const id =  Number(req.params.id)
+
+    let demanda = demandas.find(demanda => demanda.id ===id);
+
+    if(!demanda){
+        return res.status(404).json({mensagem: "Demanda não encontrada"})
+    }
+
+    demanda.status = "Cancelada";
+
+    return res.status(200).json({
+        mensagem: "Demanda cancelada com sucesso!",
+        demanda
+    })
 })
