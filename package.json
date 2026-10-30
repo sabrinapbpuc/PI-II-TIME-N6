@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/sabrinapbpuc/PI-II-TIME-N6#readme",
   "dependencies": {
+    "@types/cors": "^2.8.19",
+    "cors": "^2.8.6",
     "express": "^5.3.0"
   },
   "devDependencies": {

@@ -1,9 +1,12 @@
 //importando o servidor
 import express, { Request, Response } from "express";
+import cors from "cors";
 
 //criando servidor
 const app = express();
+
 app.use(express.json());
+app.use(cors());
 let PORT = 3000;
 
 //QUANDO O SERVIDOR ACESSAR A PORTA, SERA MOSTRADO QUAL PORTA ESTA: PORTA 3000
@@ -15,6 +18,18 @@ type Projeto = "Projeto Farm+" | "Projeto CEP" | "Projeto Lojas Cem"
 type Status = "Aberta" | "Em andamento" | "Em revisão" | "Concluida" | "Cancelada"
 type TipoDemanda = "Tarefa" | "Defeito" | "Melhoria" | "Documentação"
 type Prioridade = "Crítica" | " Alta " | "Média" | "Baixa"
+type PerfilUsuario = "Administrador" | "Líder de Projeto" | "Membro da Equipe";
+
+interface Usuario {
+    id: number;
+    nome: string;
+    perfil: PerfilUsuario;
+}
+
+interface ProjetoModel {
+    id: number;
+    nome: string;
+}
 
 interface Demanda {
     id: number;
@@ -24,7 +39,7 @@ interface Demanda {
     prioridade: Prioridade;
     status: Status;
     projetoAssociado: Projeto;
-    responsavel: string;
+    responsavel: string | null;
     dataCriacao: Date;
     dataUltimaAtualizacao: Date;
     prazoFinalizacao: Date;
@@ -46,25 +61,18 @@ let demandas: Demanda[] = [
     }
 ]
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Teste resposta do servidor");
-})
 
-app.get(`/demandas`, (req: Request, res: Response) => {
-    res.status(200).json(demandas)
-})
+let projetos: ProjetoModel[] = [
+    { id: 1, nome: "Projeto Farm+" },
+    { id: 2, nome: "Projeto CEP" },
+    { id: 3, nome: "Projeto Lojas Cem" }
+];
 
-app.get(`/demandas/:id`, (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-    const demanda = demandas.find((item => item.id === id))
-
-    if (!demanda) {
-        return res.status(404).json({ mensagem: "Demanda não encontrada!" })
-    }
-
-    return res.status(200).json(demanda)
-
-})
+let usuarios: Usuario[] = [
+    { id: 1, nome: "Carlos", perfil: "Administrador" },
+    { id: 2, nome: "Mariana", perfil: "Líder de Projeto" },
+    { id: 3, nome: "Sabrina", perfil: "Membro da Equipe" }
+];
 
 //rota dashboard
 app.get(`/demandas/dashboard`, (req: Request, res: Response) => {
@@ -106,6 +114,23 @@ app.get(`/demandas/dashboard`, (req: Request, res: Response) => {
     });
 });
 
+app.get(`/demandas`, (req: Request, res: Response) => {
+    res.status(200).json(demandas)
+})
+
+app.get(`/demandas/:id`, (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const demanda = demandas.find((item => item.id === id))
+
+    if (!demanda) {
+        return res.status(404).json({ mensagem: "Demanda não encontrada!" })
+    }
+
+    return res.status(200).json(demanda)
+
+})
+
+
 app.post("/demandas", (req: Request, res: Response) => {
     const { id, titulo, descricao, tipoDemanda, prioridade, projetoAssociado, responsavel, prazoFinalizacao } = req.body;
 
@@ -133,18 +158,28 @@ app.post("/demandas", (req: Request, res: Response) => {
 
 app.put(`/demandas/:id`, (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const { titulo, descricao, tipoDemanda, prioridade, projetoAssociado, responsavel, prazoFinalizacao } = req.body;
+    const { titulo, descricao, tipoDemanda, prioridade, status, projetoAssociado, responsavel, prazoFinalizacao, perfilUsuario } = req.body;
     const indice = demandas.findIndex(demanda => demanda.id === id)
 
     if (indice === -1) {
         return res.status(404).json({ mensagem: "Demanda não encontrada!" })
     }
     else if (!titulo || !descricao || !tipoDemanda || !prioridade || !projetoAssociado || !prazoFinalizacao) {
-        res.status(400).json({
-            mensagem: "Título, descrição, tipo de demanda, prioridade, projeto associado e prazo de finalização são obrigatórios"
-        })
-
+        return res.status(400).json({ mensagem: "Título, descrição, tipo de demanda, prioridade, projeto associado e prazo de finalização são obrigatórios" })
     }
+
+     const demandaAtual = demandas[indice];
+   
+    if (perfilUsuario === "Membro da Equipe") {
+
+        if (prioridade && prioridade !== demandaAtual.prioridade) {
+            return res.status(403).json({ mensagem: "Acesso negado: Membros da equipe não podem alterar a prioridade!" });
+        }
+        if (responsavel && responsavel !== demandaAtual.responsavel) {
+            return res.status(403).json({ mensagem: "Acesso negado: Membros da equipe não podem alterar o responsável!" });
+        }
+    }
+
     const dataAtual = new Date();
     demandas[indice] = {
         id: id,
@@ -152,31 +187,53 @@ app.put(`/demandas/:id`, (req: Request, res: Response) => {
         descricao: descricao ?? demandas[indice].descricao,
         tipoDemanda: tipoDemanda ?? demandas[indice].tipoDemanda,
         prioridade: prioridade ?? demandas[indice].prioridade,
-        status: "Aberta",
+        status: status ?? demandas[indice].status,
         projetoAssociado: projetoAssociado ?? demandas[indice].projetoAssociado,
         responsavel: responsavel !== undefined ? responsavel : demandas[indice].responsavel,
-        dataCriacao: demandas[indice].dataCriacao, 
-        dataUltimaAtualizacao: dataAtual, 
+        dataCriacao: demandas[indice].dataCriacao,
+        dataUltimaAtualizacao: dataAtual,
         prazoFinalizacao: prazoFinalizacao ? new Date(prazoFinalizacao) : demandas[indice].prazoFinalizacao
     };
 
     return res.status(200).json(demandas[indice]);
 });
 
+app.delete("/demandas/:id", (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    let demanda = demandas.find(demanda => demanda.id === id);
 
-app.delete("/demandas/:id", (req:Request, res:Response) =>{
-    const id =  Number(req.params.id)
-
-    let demanda = demandas.find(demanda => demanda.id ===id);
-
-    if(!demanda){
-        return res.status(404).json({mensagem: "Demanda não encontrada"})
+    if (!demanda) {
+        return res.status(404).json({ mensagem: "Demanda não encontrada" });
     }
 
     demanda.status = "Cancelada";
+    demanda.dataUltimaAtualizacao = new Date();
 
     return res.status(200).json({
         mensagem: "Demanda cancelada com sucesso!",
         demanda
-    })
-})
+    });
+});
+
+app.get("/projetos", (req: Request, res: Response) => {
+    return res.status(200).json(projetos);
+});
+
+app.get("/usuarios", (req: Request, res: Response) => {
+    return res.status(200).json(usuarios);
+});
+
+app.post("/login", (req: Request, res: Response) => {
+    const { nome } = req.body;
+
+    const usuario = usuarios.find(usuario => usuario.nome.toLowerCase() === nome.toLowerCase());
+
+    if (!usuario) {
+        return res.status(404).json({ mensagem: "Usuário não encontrado!" });
+    }
+
+    return res.status(200).json({
+        mensagem: `Login efetuado com sucesso como ${usuario.perfil}!`,
+        usuario
+    });
+});
