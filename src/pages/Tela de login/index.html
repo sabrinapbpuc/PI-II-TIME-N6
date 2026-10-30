@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form class="cartao" action="../Dashboard/index.html">
+<form class="cartao" id="form-login" action="../Dashboard/index.html" novalidate>
 
     <header class="cabecario"> <H1> Login</H1></header>
 
@@ -21,6 +21,7 @@
         name="email"
         id="email"
         required>
+    <span class="erro" id="erro-email"></span>
 </div>
 
 <br>
@@ -33,6 +34,7 @@
         name="senha"
         id="senha"
         required>
+    <span class="erro" id="erro-senha"></span>
 </div>
 
 <div class="botao">
@@ -40,5 +42,7 @@
     <a href="#" class="esqueceu">Esqueceu a senha?</a>
 </div>
 </form>
+
+<script src="login.js"></script>
 </body>
 </html>
