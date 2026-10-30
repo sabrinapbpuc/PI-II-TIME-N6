@@ -63,7 +63,6 @@ header p {
     background-color: grey;
 }
 
-/*Parte inicial fora das caixas*/
 .inicial {
     display: flex;
     margin-top: 20px;
@@ -71,10 +70,22 @@ header p {
     align-items: center;
 }
 
+.inicial a{
+    margin-left: auto;
+    text-decoration: none;
+}
+
 .inicial h1 {
     font-size: 34px; 
     color: #2E3D4F;
     margin: 0;
+}
+
+#mensagem-listagem{
+    padding: 0;
+    font-size: 18px;
+    margin-left: 20px;
+    color: #2E3D4F;
 }
 
 .barra-busca {
@@ -169,6 +180,10 @@ header p {
     border-radius: 6px;
     background-color: white;
     outline: none;
+}
+
+.dropbox:hover{
+    cursor: pointer;
 }
 
 /* Tabela de Demandas */
