@@ -5,13 +5,13 @@
 
 async function carregarDashboard() {
     try {
+
         // Chama a função da API que busca os dados consolidados do backend
         const dados = await buscarDashboardApi();
         const demandas = await listarDemandasApi();
-        // Nota: Se o teu backend ainda não tiver a rota /demandas/dashboard pronta, 
-        // podes usar listarDemandasApi() e fazer os .filter() aqui no front!
 
-        // 1. Atualizar os números dos Cards do Topo
+
+        //Atualiza os números dos Cards do Topo
         document.getElementById("totalDemandas").innerText = dados.total || 0;
         document.getElementById("totalAbertas").innerText = dados.abertas || 0;
         document.getElementById("totalEmAndamento").innerText = dados.emAndamento || 0;
@@ -20,7 +20,7 @@ async function carregarDashboard() {
         document.getElementById("totalCanceladas").innerText = dados.canceladas || 0;
 
 
-        //Atualizando tipo de demanda
+        //Atualiza tipo de demanda
         const totalTarefa = demandas.filter(d => d.tipoDemanda === "Tarefa").length;
         const totalDefeito = demandas.filter(d => d.tipoDemanda === "Defeito").length;
         const totalMelhoria = demandas.filter(d => d.tipoDemanda === "Melhoria").length;
@@ -51,7 +51,7 @@ async function carregarDashboard() {
             const porcentagemCritica = (criticaCount / valorMaximoGrafico) * 100;
 
 
-            // Atualiza a largura da barra de alta dinamicamente no CSS via JS:
+            //Atualiza a largura da barra de alta dinamicamente no CSS via JS:
             document.querySelector(".bar-fill.alta").style.width = `${porcentagemAlta}%`;
             document.querySelector(".bar-fill.media").style.width = `${porcentagemMedia}%`;
             document.querySelector(".bar-fill.baixa").style.width = `${porcentagemBaixa}%`;
@@ -59,7 +59,7 @@ async function carregarDashboard() {
 
         }
 
-        //Preencher a lista de Críticas em Aberto (Ex: Prioridade Alta ou Crítica)
+        //Preenche a lista de Críticas em Aberto (Prioridade Alta ou Crítica)
         const containerCriticas = document.getElementById("listaCriticas");
         containerCriticas.innerHTML = "";
 
@@ -71,7 +71,7 @@ async function carregarDashboard() {
             containerCriticas.innerHTML = `<span class="text-muted p-2">Nenhuma demanda crítica.</span>`;
         }
 
-        // 3. Preencher a lista de Próximas ao Prazo
+        //Preenche a lista de Próximas ao Prazo
         const containerPrazos = document.getElementById("listaPrazos");
         containerPrazos.innerHTML = "";
 
@@ -94,5 +94,5 @@ async function carregarDashboard() {
     }
 }
 
-// Executa ao carregar a página
+//Executa ao carregar a página
 window.addEventListener("DOMContentLoaded", carregarDashboard);
