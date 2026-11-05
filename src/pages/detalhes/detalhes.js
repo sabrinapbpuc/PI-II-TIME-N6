@@ -1,13 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // ==========================================
-    // 1. BUSCAR A DEMANDA PELO ID DA URL
+    // 1. BUSCAR A DEMANDA DO PROJETO SELECIONADO
     // ==========================================
 
     const parametros = new URLSearchParams(window.location.search);
     const id = parametros.get("id");
 
-    // Elementos que receberão os dados da demanda.
+    // Recupera o projeto selecionado anteriormente
+    const projetoId = localStorage.getItem("projetoSelecionado");
+
+    // Elementos que receberão os dados da demanda
     const titulo = document.querySelector("#titulo-demanda");
     const identificacao = document.querySelector("#id-demanda");
     const tipo = document.querySelector("#tipo-demanda");
@@ -20,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const prazo = document.querySelector("#prazo-demanda");
     const atualizacao = document.querySelector("#atualizacao-demanda");
 
-    // Formata uma data para o padrão brasileiro.
+    // Formata uma data para o padrão brasileiro
     function formatarData(data) {
         if (!data) return "Não informado";
 
@@ -33,9 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return dataFormatada.toLocaleDateString("pt-BR");
     }
 
-    // Preenche os elementos HTML com os dados recebidos.
+    // Preenche os elementos HTML com os dados recebidos
     function preencherDemanda(demanda) {
+
         titulo.textContent = demanda.titulo;
+
         identificacao.textContent =
             `#${String(demanda.id).padStart(5, "0")}`;
 
@@ -44,38 +49,73 @@ document.addEventListener("DOMContentLoaded", () => {
         status.textContent = demanda.status;
 
         descricao.textContent = demanda.descricao;
-        projeto.textContent = demanda.projetoAssociado;
+
+        projeto.textContent =
+            demanda.projetoAssociado || "Não informado";
+
         responsavel.textContent =
             demanda.responsavel || "Não atribuído";
 
-        criacao.textContent = formatarData(demanda.dataCriacao);
-        prazo.textContent = formatarData(demanda.prazoFinalizacao);
+        criacao.textContent =
+            formatarData(demanda.dataCriacao);
+
+        prazo.textContent =
+            formatarData(demanda.prazoFinalizacao);
+
         atualizacao.textContent =
             formatarData(demanda.dataUltimaAtualizacao);
     }
 
-    // Verifica se a URL possui um ID.
-    if (!id || !Number.isInteger(Number(id)) || Number(id) <= 0) {
+    // Verifica se a URL possui um ID válido e se existe projeto selecionado
+    if (
+        !id ||
+        !Number.isInteger(Number(id)) ||
+        Number(id) <= 0 ||
+        !projetoId ||
+        !Number.isInteger(Number(projetoId)) ||
+        Number(projetoId) <= 0
+    ) {
+
         titulo.textContent = "Demanda não identificada";
-        descricao.textContent = "Não foi informado um ID válido.";
+
+        descricao.textContent =
+            "Não foi possível identificar a demanda ou o projeto selecionado.";
+
     } else {
 
-        // Solicita ao backend a demanda correspondente.
-        fetch(`http://localhost:3000/demandas/${id}`)
+        // Busca as demandas do projeto selecionado no banco
+        fetch(`http://localhost:3000/api/projetos/${projetoId}/demandas`)
+
             .then(resposta => {
+
                 if (!resposta.ok) {
-                    throw new Error("Demanda não encontrada.");
+                    throw new Error("Não foi possível buscar as demandas.");
                 }
 
                 return resposta.json();
             })
-            .then(demanda => {
+
+            .then(demandas => {
+
+                // Localiza a demanda correspondente ao ID da URL
+                const demanda = demandas.find(
+                    item => Number(item.id) === Number(id)
+                );
+
+                if (!demanda) {
+                    throw new Error("Demanda não encontrada neste projeto.");
+                }
+
+                // Preenche os dados da tela
                 preencherDemanda(demanda);
             })
+
             .catch(erro => {
+
                 console.error("Erro ao buscar demanda:", erro);
 
                 titulo.textContent = "Erro ao carregar demanda";
+
                 descricao.textContent =
                     "Não foi possível carregar as informações da demanda.";
             });
@@ -102,41 +142,53 @@ document.addEventListener("DOMContentLoaded", () => {
     campo.insertAdjacentElement("afterend", contador);
     contador.insertAdjacentElement("afterend", erro);
 
+    // Limita o comentário a 500 caracteres
     campo.setAttribute("maxlength", "500");
 
+    // Atualiza o contador enquanto o usuário digita
     campo.addEventListener("input", () => {
+
         contador.textContent =
             `${campo.value.length}/500 caracteres`;
 
         erro.textContent = "";
     });
 
+    // Valida e adiciona o comentário na tela
     botao.addEventListener("click", (evento) => {
+
         evento.preventDefault();
 
         const comentario = campo.value.trim();
 
         if (comentario === "") {
+
             erro.textContent =
                 "Digite um comentário antes de enviar.";
+
             campo.focus();
             return;
         }
 
         if (comentario.length < 3) {
+
             erro.textContent =
                 "O comentário deve ter pelo menos 3 caracteres.";
+
             campo.focus();
             return;
         }
 
         if (comentario.length > 500) {
+
             erro.textContent =
                 "O comentário deve ter no máximo 500 caracteres.";
+
             campo.focus();
             return;
         }
 
+        // Cria o bloco visual do comentário
         const bloco = document.createElement("section");
         bloco.className = "comentario";
 
@@ -150,8 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         areaComentarios.insertBefore(bloco, campo);
 
+        // Limpa o campo após adicionar
         campo.value = "";
+
         contador.textContent = "0/500 caracteres";
+
         erro.textContent =
             "Comentário adicionado somente nesta visualização.";
     });
