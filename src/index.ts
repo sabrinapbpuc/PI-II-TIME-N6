@@ -4,6 +4,7 @@ import cors from "cors";
 
 //criando servidor
 const app = express();
+
 app.use(express.json());
 app.use(cors());
 let PORT = 3000;
