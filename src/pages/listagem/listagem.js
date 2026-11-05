@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const busca = document.querySelector("#busca_id");
     const status = document.querySelector("#status_id");
     const prioridade = document.querySelector("#prioridade_id");
@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const tipo = document.querySelector("#tipo_id");
     const mensagem = document.querySelector("#mensagem-listagem");
     const tbody = document.querySelector("tbody");
+
+    // Recupera o projeto selecionado anteriormente.
+    const projetoId = localStorage.getItem("projetoSelecionado");
+
+    if (!projetoId) {
+        window.location.href = "../projetos/projetos.html";
+        return;
+    }
 
     // Armazena as demandas recebidas do servidor.
     let demandas = [];
@@ -23,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         aberta: "Aberta",
         em_andamento: "Em andamento",
         em_revisao: "Em revisão",
-        concluida: "Concluida"
+        concluida: "Concluída"
     };
 
     const tipoAPI = {
@@ -87,8 +95,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const colunaPrioridade = document.createElement("td");
             const badge = document.createElement("span");
+
             badge.className =
                 `badge ${normalizar(demanda.prioridade).replace(" ", "-")}`;
+
             badge.textContent = demanda.prioridade;
             colunaPrioridade.appendChild(badge);
 
@@ -167,31 +177,49 @@ document.addEventListener("DOMContentLoaded", () => {
             : "Nenhuma demanda encontrada. Tente outros filtros.";
     }
 
-    // Busca as demandas no servidor.
-    fetch("http://localhost:3000/demandas")
-        .then(resposta => {
-            if (!resposta.ok) {
-                throw new Error("Não foi possível carregar as demandas.");
-            }
+    // Busca somente as demandas do projeto selecionado.
+    try {
+        const resposta = await fetch(
+            `http://localhost:3000/api/projetos/${projetoId}/demandas`
+        );
 
-            return resposta.json();
-        })
-        .then(dados => {
-            demandas = dados;
+        if (!resposta.ok) {
+            throw new Error("Não foi possível carregar as demandas.");
+        }
 
-            preencherResponsaveis();
-            montarTabela();
-            filtrarDemandas();
-        })
-        .catch(erro => {
-            console.error("Erro:", erro);
-            mensagem.textContent =
-                "Não foi possível carregar as demandas. Verifique se o servidor está funcionando.";
-        });
+        demandas = await resposta.json();
 
+        preencherResponsaveis();
+        montarTabela();
+        filtrarDemandas();
+
+    } catch (erro) {
+        console.error("Erro:", erro);
+
+        mensagem.textContent =
+            "Não foi possível carregar as demandas. Verifique se o servidor está funcionando.";
+    }
+
+    // Eventos dos filtros.
     busca.addEventListener("input", filtrarDemandas);
 
     [status, prioridade, responsavel, tipo].forEach(filtro => {
         filtro.addEventListener("change", filtrarDemandas);
     });
+
+    // Menu lateral.
+    const menuBtn = document.querySelector(".menu-hamburguer");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("menu-overlay");
+
+    function toggleMenu() {
+        menuBtn.classList.toggle("active");
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("active");
+    }
+
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener("click", toggleMenu);
+        overlay.addEventListener("click", toggleMenu);
+    }
 });
