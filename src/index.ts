@@ -1,9 +1,12 @@
 //importando o servidor
 import express, { Request, Response } from "express";
+import cors from "cors";
 
 //criando servidor
 const app = express();
+
 app.use(express.json());
+app.use(cors());
 let PORT = 3000;
 
 //QUANDO O SERVIDOR ACESSAR A PORTA, SERA MOSTRADO QUAL PORTA ESTA: PORTA 3000
@@ -14,7 +17,7 @@ app.listen(PORT, () => {
 type Projeto = "Projeto Farm+" | "Projeto CEP" | "Projeto Lojas Cem"
 type Status = "Aberta" | "Em andamento" | "Em revisão" | "Concluida" | "Cancelada"
 type TipoDemanda = "Tarefa" | "Defeito" | "Melhoria" | "Documentação"
-type Prioridade = "Crítica" | " Alta " | "Média" | "Baixa"
+type Prioridade = "Crítica" | "Alta" | "Média" | "Baixa"
 
 interface Demanda {
     id: number;
@@ -52,18 +55,6 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get(`/demandas`, (req: Request, res: Response) => {
     res.status(200).json(demandas)
-})
-
-app.get(`/demandas/:id`, (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-    const demanda = demandas.find((item => item.id === id))
-
-    if (!demanda) {
-        return res.status(404).json({ mensagem: "Demanda não encontrada!" })
-    }
-
-    return res.status(200).json(demanda)
-
 })
 
 //rota dashboard
@@ -105,6 +96,18 @@ app.get(`/demandas/dashboard`, (req: Request, res: Response) => {
         porTipo
     });
 });
+
+app.get(`/demandas/:id`, (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const demanda = demandas.find((item => item.id === id))
+
+    if (!demanda) {
+        return res.status(404).json({ mensagem: "Demanda não encontrada!" })
+    }
+
+    return res.status(200).json(demanda)
+
+})
 
 app.post("/demandas", (req: Request, res: Response) => {
     const { id, titulo, descricao, tipoDemanda, prioridade, status, projetoAssociado, responsavel, prazoFinalizacao } = req.body;
