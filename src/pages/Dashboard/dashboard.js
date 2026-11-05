@@ -6,12 +6,12 @@
 async function carregarDashboard() {
     try {
 
-        // Chama a função da API que busca os dados consolidados do backend
+        //chama as funções da API que busca os dados do backend
         const dados = await buscarDashboardApi();
         const demandas = await listarDemandasApi();
 
 
-        //Atualiza os números dos Cards do Topo
+        //números dos Cards do Topo
         document.getElementById("totalDemandas").innerText = dados.total || 0;
         document.getElementById("totalAbertas").innerText = dados.abertas || 0;
         document.getElementById("totalEmAndamento").innerText = dados.emAndamento || 0;
@@ -51,7 +51,7 @@ async function carregarDashboard() {
             const porcentagemCritica = (criticaCount / valorMaximoGrafico) * 100;
 
 
-            //Atualiza a largura da barra de alta dinamicamente no CSS via JS:
+            //atualiza a largura da barra de alta dinamicamente no css via js:
             document.querySelector(".bar-fill.alta").style.width = `${porcentagemAlta}%`;
             document.querySelector(".bar-fill.media").style.width = `${porcentagemMedia}%`;
             document.querySelector(".bar-fill.baixa").style.width = `${porcentagemBaixa}%`;
@@ -59,7 +59,7 @@ async function carregarDashboard() {
 
         }
 
-        //Preenche a lista de Críticas em Aberto (Prioridade Alta ou Crítica)
+        //lista de Críticas em Aberto (Prioridade Alta ou Crítica)
         const containerCriticas = document.getElementById("listaCriticas");
         containerCriticas.innerHTML = "";
 
@@ -71,7 +71,7 @@ async function carregarDashboard() {
             containerCriticas.innerHTML = `<span class="text-muted p-2">Nenhuma demanda crítica.</span>`;
         }
 
-        //Preenche a lista de Próximas ao Prazo
+        //lista de Próximas ao Prazo
         const containerPrazos = document.getElementById("listaPrazos");
         containerPrazos.innerHTML = "";
 
