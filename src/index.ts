@@ -95,6 +95,7 @@ app.get("/api/projetos", async (req: Request, res: Response) => {
 // LISTAR DEMANDAS DE UM PROJETO ESPECÍFICO
 // --------------------------------------------------
 
+
 app.get(
     "/api/projetos/:projetoId/demandas",
     async (req: Request, res: Response) => {
@@ -121,10 +122,16 @@ app.get(
                     d.prioridade AS "prioridade",
                     d.status AS "status",
                     c.nome AS "tipoDemanda",
-                    u.nome AS "responsavel"
+                    u.nome AS "responsavel",
+                    p.nome AS "projetoAssociado",
+                    d.data_criacao AS "dataCriacao",
+                    d.prazo_final AS "prazoFinalizacao",
+                    d.data_atualizacao AS "dataUltimaAtualizacao"
                 FROM DEMANDA d
                 JOIN CATEGORIA c
                     ON d.categoria_id = c.id_categoria
+                JOIN PROJETO p
+                    ON d.projeto_id = p.id_projeto
                 LEFT JOIN USUARIO u
                     ON d.responsavel_id = u.id_usuario
                 WHERE d.projeto_id = :projetoId
@@ -153,6 +160,7 @@ app.get(
         }
     }
 );
+
 
 // --------------------------------------------------
 // ROTA INICIAL DE TESTE
