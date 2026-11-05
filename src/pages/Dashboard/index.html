@@ -7,6 +7,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="./css/style.css">
     <script src="../../js/api.js"></script>
+    <script src="./dashboard.js"></script>
 </head>
 
 <body>
@@ -35,32 +36,32 @@
 
         <div class="card-info">
             <h3>TOTAL DE DEMANDAS</h3>
-            <h4>50</h4>
+            <h4 id="totalDemandas">0</h4>
         </div>
 
         <div class="card-info">
             <h3>ABERTAS</h3>
-            <h4>50</h4>
+            <h4 id="totalAbertas">0</h4>
         </div>
 
         <div class="card-info">
             <h3>EM ANDAMENTO</h3>
-            <h4>50</h4>
+            <h4 id="totalEmAndamento">0</h4>
         </div>
 
         <div class="card-info">
             <h3>EM REVISÃO</h3>
-            <h4>50</h4>
+            <h4 id="totalEmRevisao">0</h4>
         </div>
 
         <div class="card-info">
             <h3>CONCLUIDAS</h3>
-            <h4>50</h4>
+            <h4 id="totalConcluidas">0</h4>
         </div>
 
         <div class="card-info">
             <h3>CANCELADAS</h3>
-            <h4>50</h4>
+            <h4 id="totalCanceladas">0</h4>
         </div>
     </div>
 
@@ -84,7 +85,7 @@
                 <div class="bar-row">
                     <span class="label-priority baixa">Baixa</span>
                     <div class="bar-bg">
-                        <div class="bar-fill baixa" style="width: 40%;"></div>
+                        <div class="bar-fill baixa"></div>
                     </div>
                 </div>
 
@@ -122,19 +123,19 @@
             <div class="tipos-list">
                 <div class="tipo-item">
                     <span class="tipo-label">TAREFA</span>
-                    <span class="tipo-count">5</span>
+                    <span class="tipo-count" id="countTarefa">0</span>
                 </div>
                 <div class="tipo-item">
                     <span class="tipo-label">DEFEITO</span>
-                    <span class="tipo-count">1</span>
+                    <span class="tipo-count" id="countDefeito">0</span>
                 </div>
                 <div class="tipo-item">
                     <span class="tipo-label">MELHORIA</span>
-                    <span class="tipo-count">2</span>
+                    <span class="tipo-count" id="countMelhoria">0</span>
                 </div>
                 <div class="tipo-item">
                     <span class="tipo-label">DOCUMENTO</span>
-                    <span class="tipo-count">3</span>
+                    <span class="tipo-count" id="countDocumento">0</span>
                 </div>
             </div>
         </div>
@@ -148,7 +149,7 @@
             <h2>CRÍTICAS EM ABERTO</h2>
             <hr class="linha-card">
 
-            <div class="criticas-list">
+            <div class="criticas-list" id="listaCriticas">
                 <!-- Lista das demandas criticas-->
                 <a href="#" class="critica-item">Criar campo e-mail</a>
                 <a href="#" class="critica-item">Criar campo senha</a>
@@ -168,7 +169,7 @@
                 <span>PRAZO</span>
             </div>
 
-            <div class="prazos-list">
+            <div class="prazos-list" id="listaPrazos">
                 <!-- Nome de uma demanda e seu prazo-->
                 <div class="prazo-item">
                     <span class="prazo-titulo">CRIAR CAMPO SENHA</span>
