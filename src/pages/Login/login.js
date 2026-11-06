@@ -27,7 +27,7 @@ function validarEmail() {
 
   const formatoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!formatoValido) {
-    mostrarErro(inputEmail, erroEmail, 'Digite um e-mail válido (ex.: nome@email.com).');
+    mostrarErro(inputEmail, erroEmail, 'Digite um e-mail valido (ex.: nome@email.com).');
     return false;
   }
 
@@ -39,7 +39,7 @@ function validarSenha() {
   const senha = inputSenha.value;
 
   if (!senha) {
-    mostrarErro(inputSenha, erroSenha, 'Informe a senha.');
+    mostrarErro(inputSenha, erroSenha, 'Digite a senha.');
     return false;
   }
 
@@ -51,15 +51,33 @@ function validarSenha() {
   limparErro(inputSenha, erroSenha);
   return true;
 }
-
-// se tudo estiver certo vai para a pagina destino
-form.addEventListener('submit', (evento) => {
+//-----rota login
+form.addEventListener('submit', async (evento) => {
   evento.preventDefault();
 
   const emailOk = validarEmail();
   const senhaOk = validarSenha();
 
   if (emailOk && senhaOk) {
-    window.location.href = '../Dashboard/index.html';
+    //check de email e senha// colocar a api certa
+    const resposta = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: inputEmail.value,
+        senha: inputSenha.value
+      })
+    });
+    console.log(resposta);
+    // se estiver tudo certo vai para  a dashboard
+    if (resposta.ok) {
+      window.location.href = '../Dashboard/index.html'; 
+      //ou da invalido
+    } else {
+      alert('Email ou senha inválidos');
+    }
   }
 });
+

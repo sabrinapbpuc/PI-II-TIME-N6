@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edição de Demanda</title>
     <!-- Ligação ao arquivo CSS externo -->
     <link rel="stylesheet" href="edicao.css">
+    <script src="edicao.js" defer></script>
 </head>
+
 <body>
 
     <div class="modal">
         <h2 class="modal-title">Edição de Demanda</h2>
-        
-        <form action="../detalhes/detalhes.html">
+
+        <form id="form-edicao" action="../detalhes/detalhes.html">
             <div class="form-grid">
                 <!-- Coluna Esquerda - Linha 1: Nome -->
                 <div class="form-group">
                     <label>Nome:</label>
                     <div class="input-wrapper">
-                        <input type="text" class="form-control" value="Relatório">
+                        <input type="text" id="edit-titulo" class="form-control" value="Relatório">
                     </div>
                 </div>
 
@@ -26,10 +29,12 @@
                 <div class="form-group">
                     <label>Status:</label>
                     <div class="input-wrapper">
-                        <select class="form-control">
-                            <option selected>Em andamento</option>
-                            <option>Pendente</option>
-                            <option>Concluído</option>
+                        <select id="edit-status" class="form-control">
+                            <option value="Aberta">Aberta</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Em Revisão">Em Revisão</option>
+                            <option value="Concluída">Concluída</option>
+                            <option value="Cancelada">Cancelada</option>
                         </select>
                         <span class="icon-select">&#9660;</span>
                     </div>
@@ -39,10 +44,8 @@
                 <div class="form-group">
                     <label>Tipo:</label>
                     <div class="input-wrapper">
-                        <select class="form-control">
-                            <option selected>Melhoria</option>
-                            <option>Correção</option>
-                            <option>Nova Funcionalidade</option>
+                        <select id="edit-categoria" class="form-control">
+                            <option value="" disabled selected>Selecione o tipo</option>
                         </select>
                         <span class="icon-select">&#9660;</span>
                     </div>
@@ -52,10 +55,8 @@
                 <div class="form-group">
                     <label>Responsável:</label>
                     <div class="input-wrapper">
-                        <select class="form-control">
-                            <option selected>João</option>
-                            <option>Maria</option>
-                            <option>Ana</option>
+                        <select id="edit-responsavel" class="form-control">
+                            <option value="" disabled selected>Selecione o responsável</option>
                         </select>
                         <span class="icon-select">&#9660;</span>
                     </div>
@@ -65,10 +66,11 @@
                 <div class="form-group">
                     <label>Prioridade:</label>
                     <div class="input-wrapper">
-                        <select class="form-control">
-                            <option selected>Média</option>
-                            <option>Alta</option>
-                            <option>Baixa</option>
+                        <select id="edit-prioridade" class="form-control">
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Crítica">Crítica</option>
                         </select>
                         <span class="icon-select">&#9660;</span>
                     </div>
@@ -78,10 +80,8 @@
                 <div class="form-group">
                     <label>Projeto:</label>
                     <div class="input-wrapper">
-                        <select class="form-control">
-                            <option selected>Projeto Teste</option>
-                            <option>Projeto Alpha</option>
-                            <option>Projeto Beta</option>
+                        <select id="edit-projeto" class="form-control">
+                            <option value="" disabled selected>Selecione o projeto</option>
                         </select>
                         <span class="icon-select">&#9660;</span>
                     </div>
@@ -91,8 +91,17 @@
                 <div class="form-group">
                     <label>Prazo:</label>
                     <div class="input-wrapper">
-                        <input type="text" class="form-control placeholder-gray" placeholder="**/****/*****">
-                        <span class="icon-calendar">📅</span>
+                        <input type="date" id="edit-prazo" class="form-control placeholder-gray"
+                            placeholder="**/****/*****">
+                    </div>
+                </div>
+
+                <!-- Campo de Descrição -->
+                <div class="form-group descricao-completa" style="grid-column: span 2;">
+                    <label>Descrição:</label>
+                    <div class="input-wrapper">
+                        <textarea style="resize: none;" id="edit-descricao" name="descricao" class="form-control" rows="4"
+                            placeholder="Descreva os detalhes da demanda..."></textarea>
                     </div>
                 </div>
 
@@ -105,4 +114,5 @@
     </div>
 
 </body>
+
 </html>

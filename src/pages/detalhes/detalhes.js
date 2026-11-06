@@ -42,9 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
         titulo.textContent = demanda.titulo;
 
         identificacao.textContent =
-            `#${String(demanda.id).padStart(5, "0")}`;
+            `#${String(demanda.id_demanda).padStart(5, "0")}`;
 
-        tipo.textContent = demanda.tipoDemanda;
+        tipo.textContent = demanda.categoria_nome;
         prioridade.textContent = demanda.prioridade;
         status.textContent = demanda.status;
 
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             demanda.projetoAssociado || "Não informado";
 
         responsavel.textContent =
-            demanda.responsavel || "Não atribuído";
+            demanda.responsavel_nome || "Não atribuído";
 
         criacao.textContent =
             formatarData(demanda.dataCriacao);

@@ -178,3 +178,68 @@ CREATE TABLE HISTORICO (
         FOREIGN KEY (demanda_id)
         REFERENCES DEMANDA(id_demanda)
 );
+
+
+-- =========================================
+-- INSERT DE USUÁRIO
+-- =========================================
+INSERT INTO USUARIO (id_usuario, nome, email, senha, cargo) 
+VALUES (1, 'Ana Silva', 'ana.silva@email.com', 'senha123', 'Administrador');
+
+INSERT INTO USUARIO (id_usuario, nome, email, senha, cargo)
+VALUES (2, 'HIGOR', 'higor@gmail.com', 'senha123', 'Membro da equipe');
+
+-- =========================================
+-- INSERT DE PROJETO
+-- =========================================
+
+INSERT INTO PROJETO (id_projeto, nome, descricao) 
+VALUES (1, 'Sistema de Gestão', 'Projeto para controle interno de demandas.');
+
+
+-- =========================================
+-- INSERT VINCULANDO USUARIO AO PROJETO
+-- =========================================
+INSERT INTO USUARIO_PROJETO (projeto_id, usuario_id) 
+VALUES (1, 1);
+
+
+-- =========================================
+-- INSERT CATEGORIA
+-- =========================================
+INSERT INTO CATEGORIA (id_categoria, nome) 
+VALUES (1, 'Tarefa');
+
+
+-- =========================================
+-- INSERT DE DEMANDA
+-- =========================================
+INSERT INTO DEMANDA (
+    id_demanda, titulo, descricao, status, prioridade, 
+    prazo_final, projeto_id, criador_id, responsavel_id, categoria_id
+) VALUES (
+    1, 
+    'Criar tela de login', 
+    'Desenvolver a interface de autenticação de usuários.', 
+    'Aberta', 
+    'Alta', 
+    TO_DATE('2026-12-31', 'YYYY-MM-DD'), 
+    1, -- projeto_id
+    1, -- criador_id
+    1, -- responsavel_id
+    1  -- categoria_id
+);
+
+-- =========================================
+-- INSERT DE COMENTARIO
+-- =========================================
+
+INSERT INTO COMENTARIO (id_comentario, conteudo, usuario_id, demanda_id) 
+VALUES (1, 'Iniciando o planejamento da interface de login.', 1, 1);
+
+
+-- =========================================
+-- INSERT DE HISTÓRICO DE ALTERAÇÕES
+-- =========================================
+INSERT INTO HISTORICO (id_historico, campo_alterado, valor_anterior, valor_novo, usuario_id, demanda_id) 
+VALUES (1, 'status', 'Aberta', 'Em Andamento', 1, 1);
