@@ -35,23 +35,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Preenche os elementos HTML com os dados recebidos.
     function preencherDemanda(demanda) {
+        // Atualiza o link do botão de editar para incluir o ID atual da demanda
+        const linkEditar = document.querySelector(".btn-editar-demanda").closest("a");
+        if (linkEditar) {
+            linkEditar.href = `../edicao-demandas/edicao.html?id=${demanda.id_demanda}`;
+        }
+
         titulo.textContent = demanda.titulo;
         identificacao.textContent =
-            `#${String(demanda.id).padStart(5, "0")}`;
+            `#${String(demanda.id_demanda).padStart(5, "0")}`;
 
-        tipo.textContent = demanda.tipoDemanda;
+        tipo.textContent = demanda.categoria_nome;
         prioridade.textContent = demanda.prioridade;
         status.textContent = demanda.status;
 
         descricao.textContent = demanda.descricao;
-        projeto.textContent = demanda.projetoAssociado;
+        projeto.textContent = demanda.projeto_nome;
         responsavel.textContent =
-            demanda.responsavel || "Não atribuído";
+            demanda.responsavel_nome || "Não atribuído";
 
-        criacao.textContent = formatarData(demanda.dataCriacao);
-        prazo.textContent = formatarData(demanda.prazoFinalizacao);
-        atualizacao.textContent =
-            formatarData(demanda.dataUltimaAtualizacao);
+        // Ajustado para bater com o que vem do banco (snake_case)
+        criacao.textContent = formatarData(demanda.data_criacao);
+        prazo.textContent = formatarData(demanda.prazo_final);
+        atualizacao.textContent = formatarData(demanda.data_atualizacao);
     }
 
     // Verifica se a URL possui um ID.
