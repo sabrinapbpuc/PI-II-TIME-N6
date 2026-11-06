@@ -1,3 +1,100 @@
+/*Configurações base*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F8FAFC;
+    padding-left: 30px;  
+    padding-right: 30px;
+    margin: 0;
+}
+
+h1:hover, h2:hover, p:hover, th:hover {
+    cursor: default;
+}
+
+/*Cabeçalho*/
+header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 80px; 
+}
+
+header p {
+    font-size: 22px; 
+    font-weight: bold;
+    color: #2E3D4F;
+    margin: 0;
+}
+
+.linha-topo {
+    width: calc(100% + 60px); 
+    margin-left: -30px;
+    border: 0;                  
+    height: 1px;                
+    background-color: #E2E8F0;     
+    margin-bottom: 25px;
+}
+
+/* ==========================================================================
+   BOTÃO VOLTAR EM FORMATO DE SETA (ATUALIZADO)
+   ========================================================================== */
+.btn-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Garante alinhamento vertical dos traços */
+    gap: 6px;               
+    width: 28px; 
+    height: 24px; /* Altura fixa para manter as proporções perfeitas */
+    padding: 0;
+    text-decoration: none;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+/* Efeito sutil de empurrão para a esquerda ao passar o mouse */
+.btn-voltar:hover {
+    transform: translateX(-3px);
+}
+
+/* Estilização padrão dos traços */
+.btn-voltar span {
+    background-color: #2E3D4F;
+    height: 3px;            
+    width: 100%;            
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-voltar:hover span {
+    background-color: #1A2633;
+}
+
+/* Risco Superior: Rotaciona e encaixa na ponta exata da linha do meio */
+.btn-voltar span:nth-child(1) {
+    transform: translateY(4.5px) rotate(-40deg) scaleX(0.55);
+    transform-origin: left center;
+}
+
+/* Risco do Meio: Corpo principal que serve de base guia */
+.btn-voltar span:nth-child(2) {
+    width: 100%;
+}
+
+/* Risco Inferior: Rotaciona e encaixa na ponta exata da linha do meio */
+.btn-voltar span:nth-child(3) {
+    transform: translateY(-4.5px) rotate(40deg) scaleX(0.55);
+    transform-origin: left center;
+}
+
+/* ========================================================================== */
+
 .inicial {
     display: flex;
     margin-top: 20px;

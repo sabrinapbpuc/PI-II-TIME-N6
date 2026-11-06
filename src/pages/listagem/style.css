@@ -40,6 +40,11 @@ header p {
     margin-bottom: 25px;
 }
 
+/* ==========================================================================
+   MENU HAMBURGUER & SIDEBAR RETRÁTIL (ATUALIZADO)
+   ========================================================================== */
+
+/* Botão hambúrguer estruturado com spans */
 .menu-hamburguer {
     background: none;
     border: none;
@@ -49,6 +54,8 @@ header p {
     gap: 6px;               
     width: 28px; 
     padding: 0;
+    z-index: 100; /* Garante que o botão fique acima da barra e do conteúdo */
+    position: relative;
 }
 
 .menu-hamburguer span {
@@ -62,6 +69,105 @@ header p {
 .menu-hamburguer:hover span {
     background-color: grey;
 }
+
+/* Animação das três linhas se transformando no ícone de "X" */
+.menu-hamburguer.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+    background-color: white; /* Muda para branco para contrastar com o fundo escuro */
+}
+
+.menu-hamburguer.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-hamburguer.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+    background-color: white;
+}
+
+/* Configuração da Sidebar (Barra Lateral que desliza) */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #1a1a24; 
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 6rem 1.5rem 2rem 1.5rem; /* Espaço generoso no topo para não cobrir o botão */
+    z-index: 99;
+    transform: translateX(-100%); /* Mantém escondido para fora da tela por padrão */
+    transition: transform 0.3s ease;
+}
+
+/* Classe aplicada pelo JS que faz o menu aparecer */
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid #333344;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Links internos do menu lateral */
+.nav-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+}
+
+.nav-menu a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-menu a:hover {
+    background-color: #2a2a3a;
+    color: white;
+    padding-left: 1.5rem;
+}
+
+.nav-menu a.menu-sair{
+    color: #FEE2E2;
+    background-color: rgba(220, 38, 38, 0.2);
+}
+
+.nav-menu a.menu-sair:hover{
+    color: #dc2626;
+    background-color: #FEE2E2;
+    padding-left: 1.5rem;
+}
+
+/* Overlay (Fundo escuro semitransparente que bloqueia o clique fora) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+/* ========================================================================== */
 
 .inicial {
     display: flex;
@@ -214,7 +320,7 @@ thead th {
 /* Configurações das linhas clicáveis no tbody */
 tbody tr {
     border-bottom: 1px solid #F1F5F9; 
-    cursor: pointer; /* Transforma o cursor do mouse em mãozinha */
+    cursor: pointer; 
     transition: background-color 0.2s ease;
 }
 

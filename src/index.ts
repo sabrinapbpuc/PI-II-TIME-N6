@@ -217,6 +217,50 @@ app.get('/demandas/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Rota para buscar o histórico de uma demanda
+app.get('/demandas/:id/historico', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    let conn;
+
+    try {
+        conn = await getConn();
+
+        const sql = `
+            SELECT
+                h.id_historico AS "id",
+                h.campo_alterado AS "campo_alterado",
+                h.valor_anterior AS "valor_anterior",
+                h.valor_novo AS "valor_novo",
+                h.data_alteracao AS "data_alteracao",
+                u.nome AS "usuario"
+            FROM HISTORICO h
+            LEFT JOIN USUARIO u
+                ON h.usuario_id = u.id_usuario
+            WHERE h.demanda_id = :id
+            ORDER BY h.data_alteracao DESC
+        `;
+
+        const resultado = await conn.execute(
+            sql,
+            { id: Number(id) },
+            { outFormat: oracledb.OUT_FORMAT_OBJECT }
+        );
+
+        return res.status(200).json(resultado.rows ?? []);
+
+    } catch (erro) {
+        console.error("Erro ao buscar histórico:", erro);
+
+        return res.status(500).json({
+            mensagem: "Erro ao buscar histórico."
+        });
+
+    } finally {
+        if (conn) await conn.close();
+    }
+});
+
 app.post(`/demandas`, async (req: Request, res: Response) => {
     try {
         const { titulo, descricao, status, prioridade, prazo_final, projeto_id, criador_id, responsavel_id, categoria_id } = req.body;
@@ -255,15 +299,112 @@ app.post(`/demandas`, async (req: Request, res: Response) => {
     }
 });
 
+
 app.put('/demandas/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { titulo, descricao, status, prioridade, prazo_final, projeto_id, responsavel_id, categoria_id } = req.body;
+    const id = Number(req.params.id);
+
+    const {
+        titulo,
+        descricao,
+        status,
+        prioridade,
+        prazo_final,
+        projeto_id,
+        responsavel_id,
+        categoria_id
+    } = req.body;
 
     let conn;
+
     try {
         conn = await getConn();
-        const sql = `
-            UPDATE DEMANDA SET 
+
+        // 1. Busca os dados atuais da demanda.
+        const resultadoAtual = await conn.execute(
+            `SELECT
+                titulo AS "titulo",
+                descricao AS "descricao",
+                status AS "status",
+                prioridade AS "prioridade",
+                TO_CHAR(prazo_final, 'YYYY-MM-DD') AS "prazo_final",
+                projeto_id AS "projeto_id",
+                responsavel_id AS "responsavel_id",
+                categoria_id AS "categoria_id"
+            FROM DEMANDA
+            WHERE id_demanda = :id
+            FOR UPDATE`,
+            { id },
+            { outFormat: oracledb.OUT_FORMAT_OBJECT }
+        );
+
+        if (!resultadoAtual.rows || resultadoAtual.rows.length === 0) {
+            return res.status(404).json({
+                mensagem: "Demanda não encontrada."
+            });
+        }
+
+        const atual: any = resultadoAtual.rows[0];
+
+        // 2. Organiza os campos que serão comparados.
+        const alteracoes = [
+            {
+                campo: "Título",
+                anterior: atual.titulo,
+                novo: titulo
+            },
+            {
+                campo: "Descrição",
+                anterior: atual.descricao,
+                novo: descricao
+            },
+            {
+                campo: "Status",
+                anterior: atual.status,
+                novo: status
+            },
+            {
+                campo: "Prioridade",
+                anterior: atual.prioridade,
+                novo: prioridade
+            },
+            {
+                campo: "Prazo final",
+                anterior: atual.prazo_final,
+                novo: prazo_final
+            },
+            {
+                campo: "Projeto",
+                anterior: atual.projeto_id,
+                novo: projeto_id
+            },
+            {
+                campo: "Responsável",
+                anterior: atual.responsavel_id,
+                novo: responsavel_id
+            },
+            {
+                campo: "Categoria",
+                anterior: atual.categoria_id,
+                novo: categoria_id
+            }
+        ];
+
+        // 3. Identifica somente os campos que mudaram.
+        function normalizar(valor: any) {
+            if (valor === null || valor === undefined || valor === "") {
+                return null;
+            }
+
+            return String(valor);
+        }
+
+        const camposAlterados = alteracoes.filter(item =>
+            normalizar(item.anterior) !== normalizar(item.novo)
+        );
+
+        // 4. Atualiza a demanda.
+        const sqlAtualizar = `
+            UPDATE DEMANDA SET
                 titulo = :titulo,
                 descricao = :descricao,
                 status = :status,
@@ -276,22 +417,67 @@ app.put('/demandas/:id', async (req: Request, res: Response) => {
             WHERE id_demanda = :id
         `;
 
-        await conn.execute(sql, {
+        await conn.execute(sqlAtualizar, {
             titulo,
             descricao,
             status,
             prioridade,
-            prazo_final,
+            prazo_final: prazo_final || null,
             projeto_id: projeto_id ? Number(projeto_id) : null,
             responsavel_id: responsavel_id ? Number(responsavel_id) : null,
             categoria_id: categoria_id ? Number(categoria_id) : null,
-            id: Number(id)
-        }, { autoCommit: true });
+            id
+        });
 
-        return res.status(200).json({ mensagem: "Demanda atualizada com sucesso!" });
+        // 5. Registra cada alteração na tabela HISTORICO.
+        for (const alteracao of camposAlterados) {
+            const sqlHistorico = `
+                INSERT INTO HISTORICO (
+                    id_historico,
+                    campo_alterado,
+                    valor_anterior,
+                    valor_novo,
+                    data_alteracao,
+                    usuario_id,
+                    demanda_id
+                ) VALUES (
+                    (SELECT NVL(MAX(id_historico), 0) + 1 FROM HISTORICO),
+                    :campo,
+                    :anterior,
+                    :novo,
+                    SYSDATE,
+                    NULL,
+                    :id
+                )
+            `;
+
+            await conn.execute(sqlHistorico, {
+                campo: alteracao.campo,
+                anterior: normalizar(alteracao.anterior),
+                novo: normalizar(alteracao.novo),
+                id
+            });
+        }
+
+        // 6. Confirma as alterações no banco.
+        await conn.commit();
+
+        return res.status(200).json({
+            mensagem: "Demanda atualizada e histórico registrado com sucesso!",
+            quantidadeAlteracoes: camposAlterados.length
+        });
+
     } catch (erro) {
+        if (conn) {
+            await conn.rollback();
+        }
+
         console.error("Erro ao atualizar demanda:", erro);
-        return res.status(500).json({ mensagem: "Erro ao atualizar demanda no banco de dados." });
+
+        return res.status(500).json({
+            mensagem: "Erro ao atualizar demanda no banco de dados."
+        });
+
     } finally {
         if (conn) await conn.close();
     }
@@ -349,53 +535,6 @@ app.get('/categorias', async (req: Request, res: Response) => {
         console.error("Erro ao buscar categorias:", erro);
         return res.status(500).json({ mensagem: "Erro ao buscar categorias!" });
     } finally {
-        if (conn) await conn.close();
-    }
-    demandas.push(novaDemanda);
-    return res.status(201).json(novaDemanda)
-})
-
-//Rotas de login
-
-app.post('/login', async (req: Request, res: Response) => {
-
-    const { email, senha } = req.body;
-
-    let conn;
-
-    try {
-        conn = await getConn();
-        // consultando o banco pra ver se o usuario existe com o email e senha
-        const sql = `
-            SELECT *
-            FROM USUARIO
-            WHERE EMAIL = :email
-            AND SENHA = :senha
-        `;
-        // consulta oracle
-        const resultado = await conn.execute(
-            sql,
-            { email, senha },
-            { outFormat: oracledb.OUT_FORMAT_OBJECT }
-        );
-        //procura usuario 
-        if (!resultado.rows?.length) {
-            //não encontrou :
-            return res.status(401).json({
-                mensagem: "Email ou senha inválidos"
-            });
-        }
-        // encontrado 
-        return res.status(200).json(resultado.rows[0]);
-
-    } catch (erro) {
-        //erro inesperado
-        console.error(erro);
-        return res.status(500).json({
-            mensagem: "Erro ao realizar login"
-        });
-    } finally {
-        //fecha
         if (conn) await conn.close();
     }
 });
