@@ -244,3 +244,48 @@ app.post("/demandas", (req: Request, res: Response) => {
     demandas.push(novaDemanda);
     return res.status(201).json(novaDemanda)
 })
+
+//Rotas de login
+
+app.post('/login', async (req: Request, res: Response) => {
+
+    const { email, senha } = req.body;
+
+    let conn;
+
+    try {
+        conn = await getConn();
+        // consultando o banco pra ver se o usuario existe com o email e senha
+        const sql = `
+            SELECT *
+            FROM USUARIO
+            WHERE EMAIL = :email
+            AND SENHA = :senha
+        `;
+        // consulta oracle
+        const resultado = await conn.execute(
+            sql,
+            { email, senha },
+            { outFormat: oracledb.OUT_FORMAT_OBJECT }
+        );
+        //procura usuario 
+        if (!resultado.rows?.length) {
+            //não encontrou :
+            return res.status(401).json({
+                mensagem: "Email ou senha inválidos"
+            });
+        }
+        // encontrado 
+        return res.status(200).json(resultado.rows[0]);
+
+    } catch (erro) {
+        //erro inesperado
+        console.error(erro);
+        return res.status(500).json({
+            mensagem: "Erro ao realizar login"
+        });
+    } finally {
+        //fecha
+        if (conn) await conn.close();
+    }
+});
