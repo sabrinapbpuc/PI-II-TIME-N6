@@ -1,66 +1,96 @@
 const API_BASE_URL = "http://localhost:3000";
 
-//listando todas demandas
+// Recupera o token do usuário autenticado.
+function obterCabecalhos() {
+
+    const token = localStorage.getItem("token");
+
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
+// Lista as demandas.
 async function listarDemandasApi() {
-    const resposta = await fetch(`${API_BASE_URL}/demandas`);
-    return await tratarRespostaApi(resposta);
-}
 
-//busca demanda por id
-async function buscarDemandaApi(id) {
-    const resposta = await fetch(`${API_BASE_URL}/demandas/${id}`);
-    return await tratarRespostaApi(resposta);
-}
-
-//busca os dados para dashboard
-async function buscarDashboardApi() {
-    const resposta = await fetch(`${API_BASE_URL}/demandas/dashboard`);
-    return await tratarRespostaApi(resposta);
-}
-
-//cadastra uma nova demanda
-async function cadastrarDemandaApi(demanda) {
     const resposta = await fetch(`${API_BASE_URL}/demandas`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: obterCabecalhos()
+    });
+
+    return await tratarRespostaApi(resposta);
+}
+
+// Busca uma demanda por ID.
+async function buscarDemandaApi(id) {
+
+    const resposta = await fetch(`${API_BASE_URL}/demandas/${id}`, {
+        headers: obterCabecalhos()
+    });
+
+    return await tratarRespostaApi(resposta);
+}
+
+// Busca os dados do Dashboard.
+async function buscarDashboardApi() {
+
+    const resposta = await fetch(`${API_BASE_URL}/demandas/dashboard`, {
+        headers: obterCabecalhos()
+    });
+
+    return await tratarRespostaApi(resposta);
+}
+
+// Cadastra uma nova demanda.
+async function cadastrarDemandaApi(demanda) {
+
+    const resposta = await fetch(`${API_BASE_URL}/demandas`, {
+        method: "POST",
+        headers: obterCabecalhos(),
         body: JSON.stringify(demanda)
     });
 
     return await tratarRespostaApi(resposta);
 }
 
-//atualiza uma demanda
+// Atualiza uma demanda.
 async function atualizarDemandaApi(id, demanda) {
+
     const resposta = await fetch(`${API_BASE_URL}/demandas/${id}`, {
-        method: 'PUT',
-        headers: {
-            "Content-Type": "application/json"
-        },
+        method: "PUT",
+        headers: obterCabecalhos(),
         body: JSON.stringify(demanda)
     });
 
     return await tratarRespostaApi(resposta);
 }
 
-//cancela uma demanda
+// Cancela uma demanda.
 async function cancelarDemandaApi(id) {
+
     const resposta = await fetch(`${API_BASE_URL}/demandas/${id}`, {
-        method: 'DELETE'
+        method: "DELETE",
+        headers: obterCabecalhos()
     });
 
     return await tratarRespostaApi(resposta);
 }
 
-//função para tratar erros da API de forma padronizada
+// Trata erros da API.
 async function tratarRespostaApi(resposta) {
+
     const dados = await resposta.json();
 
     if (!resposta.ok) {
-        // pwga a mensagem do backend para mostrar ao usuario, se não tiver mostra erro padrão "Erro na requisição"
-        const mensagem = dados.mensagem || "Erro na requisição";
-        throw new Error(mensagem);
+
+        if (resposta.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuarioLogado");
+
+            window.location.href = "../Login/index.html";
+        }
+
+        throw new Error(dados.mensagem || "Erro na requisição.");
     }
 
     return dados;
