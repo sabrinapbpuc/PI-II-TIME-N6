@@ -1,5 +1,5 @@
 //importando o servidor
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import oracledb from 'oracledb';
 import { initPool, getConn, closePool } from "./db";
@@ -53,21 +53,7 @@ app.use((req: Request, res: Response, next) => {
     next();
 });
 
-// Verifica se o cargo possui determinada permissão
-function exigirCargos(...cargosPermitidos: string[]) {
-    return (req: Request, res: Response, next: Function) => {
 
-        const usuario = (req as any).usuario as UsuarioSessao;
-
-        if (!cargosPermitidos.includes(usuario.cargo)) {
-            return res.status(403).json({
-                mensagem: "Você não possui permissão para realizar esta ação."
-            });
-        }
-
-        next();
-    };
-}
 
 async function iniciarServidor() {
 
@@ -561,8 +547,11 @@ app.get('/demandas/:id/historico', async (req: Request, res: Response) => {
     }
 });
 
-// Cadastra um comentário em uma demanda.
 
+
+
+
+// Cadastra um comentário em uma demanda.
 app.post('/demandas/:id/comentarios', async (req: Request, res: Response) => {
 
     const usuario = (req as any).usuario;
@@ -647,6 +636,22 @@ app.post('/demandas/:id/comentarios', async (req: Request, res: Response) => {
         if (conn) await conn.close();
     }
 });
+
+// Verifica se o cargo possui determinada permissão
+function exigirCargos(...cargosPermitidos: string[]) {
+    return (req: Request, res: Response, next: NextFunction): void => {
+        const usuario = (req as any).usuario as UsuarioSessao;
+
+        if (!cargosPermitidos.includes(usuario.cargo)) {
+            res.status(403).json({
+                mensagem: "Você não possui permissão para realizar esta ação."
+            });
+            return;
+        }
+
+        next();
+    };
+}
 
 app.post(
     '/demandas',
