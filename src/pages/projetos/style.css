@@ -1,0 +1,127 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F8FAFC;
+    padding: 0 30px;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+}
+
+header p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2E3D4F;
+}
+
+.linha-topo {
+    width: calc(100% + 60px);
+    margin-left: -30px;
+    border: 0;
+    height: 1px;
+    background-color: #E2E8F0;
+}
+
+.btn-sair {
+    color: #DC2626;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 60px auto;
+}
+
+.titulo {
+    margin-bottom: 35px;
+}
+
+.titulo h1 {
+    color: #2E3D4F;
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.titulo p {
+    color: #64748B;
+    font-size: 18px;
+}
+
+#mensagem {
+    color: #64748B;
+    font-size: 17px;
+}
+
+.lista-projetos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.card-projeto {
+    background-color: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.card-projeto:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-color: #2E3D4F;
+}
+
+.card-projeto h2 {
+    color: #2E3D4F;
+    font-size: 23px;
+    margin-top: 0;
+}
+
+.card-projeto p {
+    color: #64748B;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.card-projeto button {
+    background-color: #2E3D4F;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.card-projeto button:hover {
+    background-color: #1A2633;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0 18px;
+    }
+
+    .container {
+        margin-top: 35px;
+    }
+
+    .titulo h1 {
+        font-size: 28px;
+    }
+}

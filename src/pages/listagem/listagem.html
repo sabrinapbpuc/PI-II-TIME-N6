@@ -15,14 +15,25 @@
 
 <body>
     <header>
-        <a href="../Dashboard/index.html">
-            <button class="menu-hamburguer">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </a>
+        <button class="menu-hamburguer">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="overlay" id="menu-overlay"></div>
+
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">Painel</div>
+            <ul class="nav-menu">
+                <li><a href="../projetos/projetos.html">Página Inicial</a></li>
+                <li><a href="../Dashboard/index.html">Dashboard</a></li>
+                <li><a href="../Tela de login/index.html" class="menu-sair">Sair</a></li>
+            </ul>
+        </nav>
+        
         <p>Sistema de Demandas</p>
+
     </header>
     <hr class="linha-topo">
 
@@ -91,29 +102,7 @@
                     <th>Responsável</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr
-                    data-descricao="Tela de autenticação"
-                    onclick="window.location='../detalhes/detalhes.html';"
-                >
-                    <td>Login</td>
-                    <td class="txt-mutado">Tarefa</td>
-                    <td><span class="badge alta">Alta</span></td>
-                    <td class="txt-mutado">Em andamento</td>
-                    <td class="txt-mutado">João</td>
-                </tr>
-
-                <tr
-                    data-descricao="Erro no formulário de cadastro"
-                    onclick="window.location='../detalhes/detalhes.html';"
-                >
-                    <td>Erro Cadastro</td>
-                    <td class="txt-mutado">Defeito</td>
-                    <td><span class="badge critica">Crítica</span></td>
-                    <td class="txt-mutado">Em Revisão</td>
-                    <td class="txt-mutado">Maria</td>
-                </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </section>
     <script src="listagem.js" defer></script>

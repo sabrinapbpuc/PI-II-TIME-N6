@@ -1,3 +1,63 @@
+/*Configurações base*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F8FAFC;
+    padding-left: 30px;  
+    padding-right: 30px;
+    margin: 0;
+}
+
+h1:hover, h2:hover, p:hover, th:hover {
+    cursor: default;
+}
+
+/*Cabeçalho*/
+header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 80px; 
+}
+
+header p {
+    font-size: 22px; 
+    font-weight: bold;
+    color: #2E3D4F;
+    margin: 0;
+}
+
+.linha-topo {
+    width: calc(100% + 60px); 
+    margin-left: -30px;
+    border: 0;                  
+    height: 1px;                
+    background-color: #E2E8F0;     
+    margin-bottom: 25px;
+}
+
+/* ==========================================================================
+   BOTÃO VOLTAR EM FORMATO DE SETA (SVG)
+   ========================================================================== */
+.btn-voltar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2E3D4F;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-voltar:hover {
+    color: #1A2633;
+    transform: translateX(-3px);
+}
+
+/* ========================================================================== */
+
 .inicial {
     display: flex;
     margin-top: 20px;
