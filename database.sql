@@ -186,8 +186,8 @@ CREATE TABLE HISTORICO (
 INSERT INTO USUARIO (id_usuario, nome, email, senha, cargo) 
 VALUES (1, 'Ana Silva', 'ana.silva@email.com', 'senha123', 'Administrador');
 
-INSERT INTO USUARIO (id_usuario, nome, email, senha, cargo)
-VALUES (2, 'HIGOR', 'higor@gmail.com', 'senha123', 'Membro da equipe');
+INSERT INTO USUARIO (id_usuario, nome, email, senha, cargo) 
+VALUES (2, 'João Santos', 'joao@email.com', 'senha123', 'Membro da Equipe');
 
 -- =========================================
 -- INSERT DE PROJETO
@@ -202,6 +202,8 @@ VALUES (1, 'Sistema de Gestão', 'Projeto para controle interno de demandas.');
 -- =========================================
 INSERT INTO USUARIO_PROJETO (projeto_id, usuario_id) 
 VALUES (1, 1);
+
+
 
 
 -- =========================================

@@ -51,19 +51,19 @@ document.addEventListener("DOMContentLoaded", () => {
         descricao.textContent = demanda.descricao;
 
         projeto.textContent =
-            demanda.projetoAssociado || "Não informado";
+            demanda.projeto_nome || "Não informado";
 
         responsavel.textContent =
             demanda.responsavel_nome || "Não atribuído";
 
         criacao.textContent =
-            formatarData(demanda.dataCriacao);
+            formatarData(demanda.data_criacao);
 
         prazo.textContent =
-            formatarData(demanda.prazoFinalizacao);
+            formatarData(demanda.prazo_final);
 
         atualizacao.textContent =
-            formatarData(demanda.dataUltimaAtualizacao);
+            formatarData(demanda.data_atualizacao);
     }
 
     // Verifica se a URL possui um ID válido e se existe projeto selecionado
@@ -82,34 +82,27 @@ document.addEventListener("DOMContentLoaded", () => {
             "Não foi possível identificar a demanda ou o projeto selecionado.";
 
     } else {
+        // Busca a demanda pelo ID.
+        const token = localStorage.getItem("token");
 
-        // Busca as demandas do projeto selecionado no banco
-        fetch(`http://localhost:3000/api/projetos/${projetoId}/demandas`)
-
+        fetch(`http://localhost:3000/demandas/${id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
             .then(resposta => {
 
                 if (!resposta.ok) {
-                    throw new Error("Não foi possível buscar as demandas.");
+                    throw new Error("Não foi possível buscar a demanda.");
                 }
 
                 return resposta.json();
             })
+            .then(demanda => {
 
-            .then(demandas => {
-
-                // Localiza a demanda correspondente ao ID da URL
-                const demanda = demandas.find(
-                    item => Number(item.id) === Number(id)
-                );
-
-                if (!demanda) {
-                    throw new Error("Demanda não encontrada neste projeto.");
-                }
-
-                // Preenche os dados da tela
                 preencherDemanda(demanda);
-            })
 
+            })
             .catch(erro => {
 
                 console.error("Erro ao buscar demanda:", erro);
@@ -120,6 +113,67 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Não foi possível carregar as informações da demanda.";
             });
     }
+
+    async function carregarHistorico() {
+
+        const token = localStorage.getItem("token");
+
+        try {
+
+            const resposta = await fetch(
+                `http://localhost:3000/demandas/${id}/historico`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar o histórico.");
+            }
+
+            const historico = await resposta.json();
+
+            const lista = document.querySelector("#lista-historico");
+
+            lista.innerHTML = "";
+
+            if (historico.length === 0) {
+                lista.textContent = "Nenhuma alteração registrada.";
+                return;
+            }
+
+            historico.forEach(item => {
+
+                const bloco = document.createElement("section");
+                bloco.className = "historico";
+
+                const titulo = document.createElement("h2");
+
+                titulo.textContent =
+                    `${formatarData(item.data_alteracao)} - ${item.usuario}`;
+
+                const descricao = document.createElement("p");
+
+                descricao.textContent =
+                    `${item.campo_alterado}: ${item.valor_anterior ?? "Vazio"} → ${item.valor_novo ?? "Vazio"}`;
+
+                bloco.append(titulo, descricao);
+
+                lista.appendChild(bloco);
+            });
+
+        } catch (erro) {
+
+            console.error("Erro ao carregar histórico:", erro);
+
+            document.querySelector("#lista-historico").textContent =
+                "Não foi possível carregar o histórico.";
+        }
+    }
+
+    carregarHistorico();
 
 
     // ==========================================
@@ -155,60 +209,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Valida e adiciona o comentário na tela
-    botao.addEventListener("click", (evento) => {
+    botao.addEventListener("click", async (evento) => {
 
         evento.preventDefault();
 
         const comentario = campo.value.trim();
 
         if (comentario === "") {
-
-            erro.textContent =
-                "Digite um comentário antes de enviar.";
-
+            erro.textContent = "Digite um comentário antes de enviar.";
             campo.focus();
             return;
         }
 
-        if (comentario.length < 3) {
-
-            erro.textContent =
-                "O comentário deve ter pelo menos 3 caracteres.";
-
+        if (comentario.length < 3 || comentario.length > 500) {
+            erro.textContent = "O comentário deve ter entre 3 e 500 caracteres.";
             campo.focus();
             return;
         }
 
-        if (comentario.length > 500) {
+        const token = localStorage.getItem("token");
 
-            erro.textContent =
-                "O comentário deve ter no máximo 500 caracteres.";
+        try {
 
-            campo.focus();
-            return;
+            const resposta = await fetch(
+                `http://localhost:3000/demandas/${id}/comentarios`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        conteudo: comentario
+                    })
+                }
+            );
+
+            const dados = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(dados.mensagem || "Erro ao enviar comentário.");
+            }
+
+            const bloco = document.createElement("section");
+            bloco.className = "comentario";
+
+            const tituloComentario = document.createElement("h2");
+            const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+            tituloComentario.textContent = `${usuario.nome} - agora`;
+
+            const texto = document.createElement("p");
+            texto.textContent = comentario;
+
+            bloco.append(tituloComentario, texto);
+
+            areaComentarios.insertBefore(bloco, campo);
+
+            campo.value = "";
+            contador.textContent = "0/500 caracteres";
+            erro.textContent = "Comentário salvo com sucesso!";
+
+        } catch (erroEnvio) {
+
+            console.error(erroEnvio);
+            erro.textContent = erroEnvio.message;
         }
-
-        // Cria o bloco visual do comentário
-        const bloco = document.createElement("section");
-        bloco.className = "comentario";
-
-        const tituloComentario = document.createElement("h2");
-        tituloComentario.textContent = "Você - agora";
-
-        const texto = document.createElement("p");
-        texto.textContent = comentario;
-
-        bloco.append(tituloComentario, texto);
-
-        areaComentarios.insertBefore(bloco, campo);
-
-        // Limpa o campo após adicionar
-        campo.value = "";
-
-        contador.textContent = "0/500 caracteres";
-
-        erro.textContent =
-            "Comentário adicionado somente nesta visualização.";
     });
 
 });
