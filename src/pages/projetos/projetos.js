@@ -3,20 +3,10 @@ const mensagem = document.querySelector("#mensagem");
 
 async function carregarProjetos() {
 
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        window.location.href = "../Login/index.html";
-        return;
-    }
 
     try {
 
-        const resposta = await fetch("http://localhost:3000/projetos", {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
+       const resposta = await fetch("http://localhost:3000/projetos");
 
         if (resposta.status === 401) {
             localStorage.clear();

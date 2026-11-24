@@ -52,7 +52,6 @@ form.addEventListener("submit", async (evento) => {
             return;
         }
 
-        localStorage.setItem("token", dados.token);
         localStorage.setItem(
             "usuarioLogado",
             JSON.stringify(dados.usuario)

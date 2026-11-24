@@ -4,7 +4,9 @@ import cors from "cors";
 import oracledb from 'oracledb';
 import { initPool, getConn, closePool } from "./db";
 import "dotenv/config.js";
-import { randomUUID } from "crypto";
+import session from "express-session";
+import path from "node:path";
+import { autenticar, exigirLogin } from "./autenticacao";
 
 //criando servidor
 const app = express();
@@ -20,39 +22,70 @@ type UsuarioSessao = {
     cargo: string;
 };
 
-// Sessões temporárias dos usuários
-const sessoes = new Map<string, UsuarioSessao>();
 
-// Middleware para verificar quem está acessando a API
-app.use((req: Request, res: Response, next) => {
 
-    // Permite acessar o login sem estar autenticado
-    if (req.path === "/login" && req.method === "POST") {
-        return next();
+//  atenticação por cookie
+const segredo = process.env.SESSION_SECRET;  //configura chave secreta  
+if (!segredo || segredo.length < 32) {  //verifica se está com 32 caracteres
+    throw new Error("Defina SESSION_SECRET no .env com pelo menos 32 caracteres aleatórios.");
+}
+
+app.use(session({
+    name: "portal.sid",  //id de identificação 
+    secret: segredo,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false, // HTTP local. Em produção: HTTPS e secure: true.
+        maxAge: 30 * 60 * 1000   //tempo até  se tornar invalido e precisar fazer login novamente
     }
+}));
 
-    const autorizacao = req.headers.authorization;
-
-    if (!autorizacao) {
-        return res.status(401).json({
-            mensagem: "Você precisa fazer login."
-        });
-    }
-
-    const token = autorizacao.replace("Bearer ", "");
-    const usuario = sessoes.get(token);
-
-    if (!usuario) {
-        return res.status(401).json({
-            mensagem: "Sessão inválida. Faça login novamente."
-        });
-    }
-
-    (req as any).usuario = usuario;
-
+app.use((req, res, next) => {
+    res.setHeader("Cache-Control", "no-store");
     next();
 });
 
+app.use((req, res, next) => {
+    const origem = req.get("Origin");
+    const origemEsperada = `${req.protocol}://${req.get("Host")}`;
+    const alteraDados = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method);
+    if (alteraDados && origem && origem !== origemEsperada) {
+        return res.status(403).json({ mensagem: "Origem da requisição não permitida." });
+    }
+    return next();
+});
+
+//  frontend  pelo express
+const pastaFrontend = path.resolve(__dirname, "../src");
+
+app.get("/", (req, res) => res.redirect("/pages/Login/index.html"));
+
+app.use("/pages", (req, res, next) => {
+    const publico = req.path.toLowerCase().startsWith("/login/") || req.path === "/global.css";
+    if (publico || req.session.usuario) return next();
+    return res.redirect("/pages/Login/index.html");
+}, express.static(path.join(pastaFrontend, "pages")));
+
+for (const pasta of ["js", "icons"]) {
+    app.use(`/${pasta}`, express.static(path.join(pastaFrontend, pasta)));
+}
+
+// ===== Login é público; tudo abaixo exige sessão =====
+app.post("/login", autenticar);
+app.use(exigirLogin);
+
+app.get("/sessao", (req, res) => res.json(req.session.usuario));
+
+app.post("/logout", (req, res, next) => {
+    req.session.destroy((erro) => {
+        if (erro) return next(erro);
+        res.clearCookie("portal.sid", { path: "/", httpOnly: true, sameSite: "lax", secure: false });
+        return res.json({ mensagem: "Sessão encerrada." });
+    });
+});
 
 
 async function iniciarServidor() {
@@ -109,56 +142,6 @@ async function encerrarServidor() {
 
 }
 
-app.post("/login", async (req: Request, res: Response) => {
-
-    const { email, senha } = req.body;
-
-    let conn;
-
-    try {
-        conn = await getConn();
-
-        const resultado = await conn.execute(
-            `SELECT
-                id_usuario AS "id_usuario",
-                nome AS "nome",
-                cargo AS "cargo"
-             FROM USUARIO
-             WHERE LOWER(email) = LOWER(:email)
-             AND senha = :senha`,
-            { email, senha },
-            { outFormat: oracledb.OUT_FORMAT_OBJECT }
-        );
-
-        if (!resultado.rows || resultado.rows.length === 0) {
-            return res.status(401).json({
-                mensagem: "E-mail ou senha inválidos."
-            });
-        }
-
-        const usuario = resultado.rows[0] as UsuarioSessao;
-
-        const token = randomUUID();
-
-        sessoes.set(token, usuario);
-
-        return res.status(200).json({
-            mensagem: "Login realizado com sucesso!",
-            token,
-            usuario
-        });
-
-    } catch (erro) {
-        console.error("Erro no login:", erro);
-
-        return res.status(500).json({
-            mensagem: "Erro ao realizar login."
-        });
-
-    } finally {
-        if (conn) await conn.close();
-    }
-});
 
 app.get("/demandas", async (req: Request, res: Response) => {
 
@@ -1286,5 +1269,13 @@ app.get('/categorias', async (req: Request, res: Response) => {
         if (conn) await conn.close();
     }
 });
+
+// caso de problema na requisição seja do sql, banco, ou erro no processo
+app.use((erro: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (res.headersSent) return next(erro);
+    console.error("Erro na requisição:", erro);
+    return res.status(500).json({ mensagem: "Não foi possível concluir a requisição." });
+});
+
 
 iniciarServidor();

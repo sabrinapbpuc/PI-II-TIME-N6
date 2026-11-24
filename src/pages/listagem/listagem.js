@@ -179,9 +179,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Busca somente as demandas do projeto selecionado.
     try {
-        const resposta = await fetch(
-            `http://localhost:3000/api/projetos/${projetoId}/demandas`
-        );
+       const resposta = await fetch("http://localhost:3000/demandas");
 
         if (!resposta.ok) {
             throw new Error("Não foi possível carregar as demandas.");

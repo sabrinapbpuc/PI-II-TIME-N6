@@ -7,6 +7,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const parametros = new URLSearchParams(window.location.search);
     const id = parametros.get("id");
 
+    // Faz o botão  levar o id da demanda para edição
+const botaoEditar = [...document.querySelectorAll("a, button")]
+    .find(el => el.textContent.trim() === "Editar Demanda");
+const linkEditar = botaoEditar?.closest("a") ?? (botaoEditar?.tagName === "A" ? botaoEditar : null);
+
+if (linkEditar && id) {
+    linkEditar.href = linkEditar.getAttribute("href").split("?")[0] + "?id=" + id;
+}
+
     // Recupera o projeto selecionado anteriormente
     const projetoId = localStorage.getItem("projetoSelecionado");
 
