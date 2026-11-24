@@ -89,7 +89,16 @@
 
                 <!-- Coluna Esquerda - Linha 4: Prazo -->
                 <div class="form-group">
-                    <label>Prazo:</label>
+                    <label for="edit-prazo">Prazo:</label>
+                    <div class="input-wrapper">
+                        <input type="date" id="edit-prazo" class="form-control">
+                    </div>
+                    <p id="aviso-feriado" role="alert" hidden></p>
+                </div>
+
+                <!-- Campo de Descrição -->
+                <div class="form-group descricao-completa" style="grid-column: span 2;">
+                    <label>Descrição:</label>
                     <div class="input-wrapper">
                         <input type="date" id="edit-prazo" class="form-control placeholder-gray"
                             placeholder="**/****/*****">
